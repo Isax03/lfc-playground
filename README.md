@@ -1,38 +1,17 @@
-# sv
+# LFC Playground
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Questo sito è stato creato per offrire agli studenti alle prese con il corso di Linguaggi Formali e Compilatori, un ambiente
+per controllare la correttezza di alcuni esercizi (soprattutto quelli "meccanici") e sperimentare con grammatiche, tabelle di parsing, regex, automi e altro
 
-## Creating a project
+## Contribuire
+Ogni tipo di contributo è ben accetto, se avete suggerimenti, correzioni o nuove funzionalità da proporre, sentitevi liberi di aprire una issue o una pull request.
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Features disponibili e future
+- [ ] Calcolo di FIRST e FOLLOW per una grammatica
+- [ ] Costruzione di una tabella di parsing LL(1) per una grammatica
+- [ ] Parsing di una stringa con una tabella di parsing LL(1) e visualizzazione dell'albero di parsing
+- [ ] Rimozione di ricorsione a sinistra da una grammatica
+- [ ] Fattorizzazione di una grammatica
+- [ ] Conversione di una grammatica in forma normale di Chomsky
+- [ ] Costuzione di un automa a stati finiti da una regex
+- [ ] Costuzione della tabella di parsing SLR(1) per una grammatica
