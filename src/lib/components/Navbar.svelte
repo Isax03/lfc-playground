@@ -6,7 +6,7 @@
 </script>
 
 <nav class="sticky top-0 z-[99] w-full h-max py-4 flex items-center justify-between bg-background border-b border-border">
-    <div class="w-full max-w-screen-xl flex items-center justify-between mx-auto h-max px-4">
+    <div class="w-full flex items-center justify-between mx-auto h-max px-4">
         <a href="/" class="flex items-center w-40">
             <Logo />
         </a>
