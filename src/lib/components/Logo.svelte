@@ -1,6 +1,3 @@
-<script lang="ts">
-</script>
-
 <svg viewBox="-11.556 -10.856 267.525 85.58" xmlns="http://www.w3.org/2000/svg">
     <g transform="matrix(1, 0, 0, 1, -87.596672, -63.622849)">
         <g
