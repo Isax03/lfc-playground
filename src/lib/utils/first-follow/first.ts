@@ -57,9 +57,10 @@ export function computeFirstForSequence(
     let firstSet = new Set<string>();
     let allNullable = true;
 
-    for (const symbol of sequence) {
+    for (let i = 0; i < sequence.length; i++) {
+        const symbol = sequence[i];
         const firstOfSymbol = computeFirstForSymbol(symbol, grammar, firstSets, processing);
-        
+
         // Aggiungiamo tutti i simboli tranne epsilon
         const nonEpsilonFirst = new Set([...firstOfSymbol].filter(s => s !== 'ε'));
         firstSet = new Set([...firstSet, ...nonEpsilonFirst]);
@@ -69,9 +70,11 @@ export function computeFirstForSequence(
             allNullable = false;
             break;
         }
+
+        // Se il simbolo è annullabile, continuiamo a considerare il prossimo simbolo nella sequenza
     }
 
-    // Se tutti i simboli sono nullable, aggiungiamo epsilon al risultato
+    // Se tutti i simboli sono annullabili, aggiungiamo epsilon al risultato
     if (allNullable && sequence.length > 0) {
         firstSet.add('ε');
     }
@@ -82,16 +85,32 @@ export function computeFirstForSequence(
 export function computeFirstSets(grammar: Grammar): FirstSets {
     const firstSets = new Map<string, Set<string>>();
     
-    // Calcoliamo i first per tutti i non-terminali
+    // Inizializziamo i FIRST sets per tutti i non-terminali
+    for (const nonTerminal of grammar.N) {
+        firstSets.set(nonTerminal, new Set());
+    }
+
+    // Iteriamo finché non ci sono più cambiamenti
     let changed = true;
     while (changed) {
         changed = false;
-        
+
         for (const nonTerminal of grammar.N) {
-            const oldSize = firstSets.get(nonTerminal)?.size ?? 0;
-            const newFirst = computeFirstForSymbol(nonTerminal, grammar, firstSets);
-            
-            if (newFirst.size !== oldSize) {
+            const oldSize = firstSets.get(nonTerminal)!.size;
+
+            // Calcoliamo il nuovo FIRST per questo non-terminale
+            for (const rule of grammar.P) {
+                if (rule.nonTerminal === nonTerminal) {
+                    for (const production of rule.productions) {
+                        const sequenceFirst = computeFirstForSequence(production, grammar, firstSets);
+                        const currentFirst = firstSets.get(nonTerminal)!;
+                        sequenceFirst.forEach(symbol => currentFirst.add(symbol));
+                    }
+                }
+            }
+
+            // Verifichiamo se il FIRST set è cambiato
+            if (firstSets.get(nonTerminal)!.size !== oldSize) {
                 changed = true;
             }
         }

@@ -28,11 +28,19 @@ F -> id | ( E )`);
         firstSets = computeFirstSets(grammar);
         followSets = computeFollow(grammar, firstSets);
     }
+
+    function handleKeydown(event: KeyboardEvent) {
+        if (event.ctrlKey && event.key === 'Enter') {
+            parseAndCompute();
+        }
+    }
 </script>
 
 <svelte:head>
     <title>First & Follow - LFC Playground</title>
 </svelte:head>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="flex flex-col gap-8 w-full max-w-6xl mx-auto">
     <div>
@@ -49,7 +57,12 @@ F -> id | ( E )`);
                 If you need the epsilon symbol, use `ε` or `epsilon`.
             </p>
             <Textarea bind:value={grammarInput} class="w-full h-60 font-mono" />
-            <Button onclick={parseAndCompute} class="mt-4">Compute</Button>
+            <div class="flex items-center gap-2 mt-4">
+                <Button onclick={parseAndCompute}>Compute</Button>
+                <kbd class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                    <span class="text-xs">Ctrl</span>+<span class="text-xs">Enter</span>
+                </kbd>
+            </div>
         </div>
 
         <!-- Table Section -->
