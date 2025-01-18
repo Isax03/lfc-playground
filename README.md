@@ -7,7 +7,7 @@ per controllare la correttezza di alcuni esercizi (soprattutto quelli "meccanici
 Ogni tipo di contributo è ben accetto, se avete suggerimenti, correzioni o nuove funzionalità da proporre, sentitevi liberi di aprire una issue o una pull request.
 
 ## Features disponibili e future
-- [ ] Calcolo di FIRST e FOLLOW per una grammatica
+- [x] Calcolo di FIRST e FOLLOW per una grammatica
 - [ ] Costruzione di una tabella di parsing LL(1) per una grammatica
 - [ ] Parsing di una stringa con una tabella di parsing LL(1) e visualizzazione dell'albero di parsing
 - [ ] Rimozione di ricorsione a sinistra da una grammatica
