@@ -65,7 +65,8 @@ export function parseGrammar(input: string, startSymbol?: string): Grammar {
                 // Split on one or more spaces
                 const symbols = prod
                     .split(/\s+/)
-                    .filter((symbol) => symbol !== "");
+                    .filter((symbol) => symbol !== "")
+                    .map(symbol => symbol === "epsilon" ? "ε" : symbol);
                 newProductions.push(symbols);
             }
         }
