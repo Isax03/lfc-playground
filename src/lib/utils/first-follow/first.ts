@@ -31,7 +31,7 @@ export function computeFirstForSymbol(
 
     // Iteriamo su tutte le produzioni di questo non-terminale
     for (const rule of grammar.P) {
-        if (rule.nonTerminal === symbol) {
+        if (rule.driver === symbol) {
             for (const production of rule.productions) {
                 const sequenceFirst = computeFirstForSequence(production, grammar, firstSets, processing);
                 firstSet = new Set([...firstSet, ...sequenceFirst]);
@@ -100,7 +100,7 @@ export function computeFirstSets(grammar: Grammar): FirstSets {
 
             // Calcoliamo il nuovo FIRST per questo non-terminale
             for (const rule of grammar.P) {
-                if (rule.nonTerminal === nonTerminal) {
+                if (rule.driver === nonTerminal) {
                     for (const production of rule.productions) {
                         const sequenceFirst = computeFirstForSequence(production, grammar, firstSets);
                         const currentFirst = firstSets.get(nonTerminal)!;

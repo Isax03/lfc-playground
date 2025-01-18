@@ -1,4 +1,5 @@
 import type { Grammar, ProductionRule } from "$lib/types/grammar";
+import { areProductionsEqual } from "../utils";
 
 export function parseGrammar(input: string, startSymbol?: string): Grammar {
     const lines = input.split("\n").filter((line) => line.trim() !== "");
@@ -12,21 +13,22 @@ export function parseGrammar(input: string, startSymbol?: string): Grammar {
         nonTerminal: string,
         newProductions: string[][]
     ) => {
-        const existingRule = P.find((rule) => rule.nonTerminal === nonTerminal);
+        const existingRule = P.find((rule) => rule.driver === nonTerminal);
         if (existingRule) {
             // Merge new productions into the existing rule, avoiding duplicates
-            newProductions.forEach((prod) => {
-                if (
-                    !existingRule.productions.some(
-                        (p) => JSON.stringify(p) === JSON.stringify(prod)
-                    )
-                ) {
-                    existingRule.productions.push(prod);
+            newProductions.forEach((newProd) => {
+                if (!existingRule.productions.some(p => areProductionsEqual(p, newProd))) {
+                    existingRule.productions.push(newProd);
                 }
             });
         } else {
-            // Add a new rule
-            P.push({ nonTerminal, productions: newProductions });
+            // Add a new rule with deduplicated productions
+            const uniqueProductions = newProductions.filter((prod, index) => {
+                return !newProductions.some((p, i) => 
+                    i < index && areProductionsEqual(p, prod)
+                );
+            });
+            P.push({ driver: nonTerminal, productions: uniqueProductions });
         }
     };
 
@@ -103,7 +105,7 @@ export function parseGrammar(input: string, startSymbol?: string): Grammar {
         S = startSymbol;
     } else {
         // Use the non-terminal of the first production rule
-        S = P[0].nonTerminal;
+        S = P[0].driver;
     }
 
     return { N, T, S, P };

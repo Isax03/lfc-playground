@@ -11,6 +11,7 @@
     const navItems = [
         { href: "/", label: "Home" },
         { href: "/first-follow", label: "First & Follow" },
+        { href: "/ll1-table", label: "LL(1) Table" },
     ];
 
     const currentPath = $derived(page.url.pathname);

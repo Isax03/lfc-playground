@@ -6,6 +6,6 @@ export type Grammar = {
 };
 
 export type ProductionRule = {
-    nonTerminal: string; // Left-hand side of the production
+    driver: string; // Left-hand side of the production
     productions: string[][]; // Right-hand side (array of symbols)
 };

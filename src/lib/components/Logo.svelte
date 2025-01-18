@@ -13,7 +13,7 @@
         <g
             id="SvgjsG2051"
             transform="matrix(0.46621, 0, 0, 0.46621, 212.314743, 15.25839)"
-            class="fill-primary"
+            class="fill-[#0ff]"
         >
             <g
                 xmlns="http://www.w3.org/2000/svg"

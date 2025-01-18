@@ -21,7 +21,7 @@ export function computeFollow(grammar: Grammar, firstSets: FirstSets): FollowSet
     do {
         changed = false;
         for (const rule of grammar.P) {
-            const B = rule.nonTerminal;
+            const B = rule.driver;
             for (const production of rule.productions) {
                 for (let i = 0; i < production.length; i++) {
                     const A = production[i];

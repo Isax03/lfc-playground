@@ -9,6 +9,6 @@ export function printGrammar(grammar: Grammar): string {
     Productions (P):
     ${grammar.P.map(rule => {
         const productions = rule.productions.map(prod => prod.join(' ')).join(' | ');
-        return `${rule.nonTerminal} -> ${productions}`;
+        return `${rule.driver} -> ${productions}`;
     }).join('\n    ')}`;
 }
