@@ -101,40 +101,9 @@ export function parseGrammar(input: string, startSymbol?: string): Grammar {
         }
         S = startSymbol;
     } else {
-        // Find the non-terminal that does not appear in any production body
-        const candidates = Array.from(N).filter(
-            (nt) => !symbolsInProductions.has(nt)
-        );
-        if (candidates.length === 1) {
-            S = candidates[0]; // Use the unique candidate
-        } else if (candidates.length > 1) {
-            throw new Error(
-                `Ambiguous start symbol: Multiple candidates found (${candidates.join(
-                    ", "
-                )}). Please specify the start symbol explicitly.`
-            );
-        } else {
-            // Fallback: Use the non-terminal of the first production rule
-            S = P[0].nonTerminal;
-        }
+        // Use the non-terminal of the first production rule
+        S = P[0].nonTerminal;
     }
 
     return { N, T, S, P };
 }
-
-/* // Example usage:
-const grammarInput = `
-A -> a
-A -> b
-S -> A a R
-S -> B B
-B -> b
-B -> ε
-`;
-
-try {
-    const grammar = parseGrammar(grammarInput);
-    printGrammar(grammar);
-} catch (error: any) {
-    console.error(error.message);
-} */

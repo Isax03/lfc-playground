@@ -7,7 +7,6 @@
     import { computeFirstSets } from "$lib/utils/first-follow/first";
     import { computeFollow } from "$lib/utils/first-follow/follow";
     import { parseGrammar } from "$lib/utils/grammar/parse";
-    import { printGrammar } from "$lib/utils/grammar/pretty_print";
 
     let grammarInput = $state(`E -> T E'
 E' -> + T E' | ε
@@ -42,7 +41,7 @@ F -> id | ( E )`);
             Calculate First and Follow sets for your context-free grammar
         </p>
     </div>
-    
+
     <div class="flex flex-col lg:flex-row gap-8">
         <!-- Input Section -->
         <div class="w-full lg:w-2/5">

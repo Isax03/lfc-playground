@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { page } from "$app/state";
     import Button, {
         buttonVariants,
     } from "$lib/shadcn-ui/components/ui/button/button.svelte";
@@ -11,6 +12,15 @@
         { href: "/", label: "Home" },
         { href: "/first-follow", label: "First & Follow" },
     ];
+
+    const currentPath = $derived(page.url.pathname);
+
+    function isActive(href: string) {
+        if (href === "/") {
+            return currentPath === href;
+        }
+        return currentPath.startsWith(href);
+    }
 </script>
 
 <nav
@@ -27,7 +37,11 @@
                     <li>
                         <a
                             href={item.href}
-                            class="block py-2 text-muted-foreground hover:text-primary transition-colors"
+                            class="block py-2 transition-colors {isActive(
+                                item.href
+                            )
+                                ? 'text-primary font-medium'
+                                : 'text-muted-foreground hover:text-primary'}"
                         >
                             {item.label}
                         </a>
@@ -62,10 +76,16 @@
                         </Sheet.Header>
                         <div class="flex flex-col gap-4 mt-4 items-start">
                             {#each navItems as item}
-                                <Sheet.Close class={buttonVariants({ variant: "link" })}>
+                                <Sheet.Close
+                                    class={buttonVariants({ variant: "link" })}
+                                >
                                     <a
                                         href={item.href}
-                                        class="block py-2 text-muted-foreground hover:text-primary transition-colors"
+                                        class="block py-2 transition-colors {isActive(
+                                            item.href
+                                        )
+                                            ? 'text-primary font-medium'
+                                            : 'text-muted-foreground hover:text-primary'}"
                                     >
                                         {item.label}
                                     </a>
