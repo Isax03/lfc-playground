@@ -3,9 +3,10 @@
 
 	interface Props {
 		firstSets: Map<string, Set<string>>;
+        followSets: Map<string, Set<string>>;
 	}
 
-	let { firstSets }: Props = $props();
+	let { firstSets, followSets }: Props = $props();
 </script>
 
 <Table.Root class="w-max">
@@ -13,6 +14,7 @@
         <Table.Row>
             <Table.Head class="w-[20px] px-12"></Table.Head>
             <Table.Head class="w-[20px] px-12">First</Table.Head>
+            <Table.Head class="w-[20px] px-12">Follow</Table.Head>
         </Table.Row>
     </Table.Header>
     <Table.Body>
@@ -20,6 +22,7 @@
             <Table.Row>
                 <Table.Cell class="w-[20px] font-medium">{nonTerminal}</Table.Cell>
                 <Table.Cell class="w-[20px]">{Array.from(firstSets.get(nonTerminal)!!).join(", ")}</Table.Cell>
+                <Table.Cell class="w-[20px]">{Array.from(followSets.get(nonTerminal)!!).join(", ")}</Table.Cell>
             </Table.Row>
         {/each}
     </Table.Body>

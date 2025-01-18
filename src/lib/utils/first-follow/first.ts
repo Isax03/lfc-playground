@@ -1,7 +1,8 @@
+import type { FirstSet, FirstSets } from "$lib/types/first-follow";
 import type { Grammar } from "$lib/types/grammar";
 
 // Funzione per calcolare il first di un singolo simbolo
-function computeFirstForSymbol(symbol: string, grammar: Grammar, firstSets: Map<string, Set<string>>): Set<string> {
+function computeFirstForSymbol(symbol: string, grammar: Grammar, firstSets: FirstSets): FirstSet {
     if (grammar.T.has(symbol)  || symbol == 'ε') {
         // Se il simbolo è un terminale o 'ε', il first è il simbolo stesso
         return new Set([symbol]);
@@ -29,12 +30,12 @@ function computeFirstForSymbol(symbol: string, grammar: Grammar, firstSets: Map<
 }
 
 // Funzione per calcolare il first di una sequenza di simboli
-function computeFirstForSequence(sequence: string[], grammar: Grammar, firstSets: Map<string, Set<string>>): Set<string> {
+export function computeFirstForSequence(sequence: string[], grammar: Grammar, firstSets: FirstSets): FirstSet {
     let firstSet = new Set<string>();
     let allNullable = true;
 
     for (const symbol of sequence) {
-        const firstOfSymbol = computeFirstForSymbol(symbol, grammar, firstSets);
+        const firstOfSymbol = firstSets.get(symbol) ?? computeFirstForSymbol(symbol, grammar, firstSets);
 
         firstSet = firstSet.union(firstOfSymbol.difference(new Set<string>(['ε'])));
 
@@ -52,7 +53,7 @@ function computeFirstForSequence(sequence: string[], grammar: Grammar, firstSets
 }
 
 // Funzione principale per calcolare i first per tutti i non-terminali
-export function computeFirstSets(grammar: Grammar): Map<string, Set<string>> {
+export function computeFirstSets(grammar: Grammar): FirstSets {
     const firstSets = new Map<string, Set<string>>();
 
     for (const nonTerminal of grammar.N) {
