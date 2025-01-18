@@ -2,8 +2,8 @@ import type { Grammar } from "$lib/types/grammar";
 
 // Funzione per calcolare il first di un singolo simbolo
 function computeFirstForSymbol(symbol: string, grammar: Grammar, firstSets: Map<string, Set<string>>): Set<string> {
-    if (grammar.T.has(symbol)) {
-        // Se il simbolo è un terminale, il first è il simbolo stesso
+    if (grammar.T.has(symbol)  || symbol == 'ε') {
+        // Se il simbolo è un terminale o 'ε', il first è il simbolo stesso
         return new Set([symbol]);
     }
 
@@ -13,48 +13,31 @@ function computeFirstForSymbol(symbol: string, grammar: Grammar, firstSets: Map<
     }
 
     // Inizializziamo il set dei first per questo simbolo
-    const firstSet = new Set<string>();
-    firstSets.set(symbol, firstSet);
+    let firstSet = new Set<string>();
 
     // Iteriamo su tutte le produzioni di questo non-terminale
     for (const rule of grammar.P) {
         if (rule.nonTerminal === symbol) {
             for (const production of rule.productions) {
-                let allNullable = true;
-                for (const sym of production) {
-                    const firstOfSym = computeFirstForSymbol(sym, grammar, firstSets);
-                    for (const f of firstOfSym) {
-                        if (f !== 'ε') {
-                            firstSet.add(f);
-                        }
-                    }
-                    if (!firstOfSym.has('ε')) {
-                        allNullable = false;
-                        break;
-                    }
-                }
-                if (allNullable) {
-                    firstSet.add('ε');
-                }
+                firstSet = firstSet.union(computeFirstForSequence(production, grammar, firstSets));
             }
         }
     }
+    firstSets.set(symbol, firstSet);
 
     return firstSet;
 }
 
 // Funzione per calcolare il first di una sequenza di simboli
 function computeFirstForSequence(sequence: string[], grammar: Grammar, firstSets: Map<string, Set<string>>): Set<string> {
-    const firstSet = new Set<string>();
+    let firstSet = new Set<string>();
     let allNullable = true;
 
     for (const symbol of sequence) {
         const firstOfSymbol = computeFirstForSymbol(symbol, grammar, firstSets);
-        for (const f of firstOfSymbol) {
-            if (f !== 'ε') {
-                firstSet.add(f);
-            }
-        }
+
+        firstSet = firstSet.union(firstOfSymbol.difference(new Set<string>(['ε'])));
+
         if (!firstOfSymbol.has('ε')) {
             allNullable = false;
             break;
