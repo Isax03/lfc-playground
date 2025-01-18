@@ -1,29 +1,41 @@
 <script lang="ts">
-    import * as Table from "$lib/shadcn-ui/components/ui/table/index";
+    import * as Table from "$lib/shadcn-ui/components/ui/table";
+    import type { FirstSets, FollowSets } from "$lib/types/first-follow";
+    export let firstSets: FirstSets;
+    export let followSets: FollowSets;
 
-	interface Props {
-		firstSets: Map<string, Set<string>>;
-        followSets: Map<string, Set<string>>;
-	}
-
-	let { firstSets, followSets }: Props = $props();
+    $: hasData = firstSets.size > 0;
 </script>
 
-<Table.Root class="w-max">
-    <Table.Header>
-        <Table.Row>
-            <Table.Head class="w-[20px] px-12"></Table.Head>
-            <Table.Head class="w-[20px] px-12">First</Table.Head>
-            <Table.Head class="w-[20px] px-12">Follow</Table.Head>
-        </Table.Row>
-    </Table.Header>
-    <Table.Body>
-        {#each firstSets.keys()  as nonTerminal}
-            <Table.Row>
-                <Table.Cell class="w-[20px] font-medium">{nonTerminal}</Table.Cell>
-                <Table.Cell class="w-[20px]">{Array.from(firstSets.get(nonTerminal)!!).join(", ")}</Table.Cell>
-                <Table.Cell class="w-[20px]">{Array.from(followSets.get(nonTerminal)!!).join(", ")}</Table.Cell>
-            </Table.Row>
-        {/each}
-    </Table.Body>
-</Table.Root>
+
+
+{#if hasData}
+    <div class="w-full border rounded-md">
+        <Table.Root class="w-full">
+            <Table.Header>
+                <Table.Row>
+                    <Table.Head class="w-[100px]">Non-terminal</Table.Head>
+                    <Table.Head>First</Table.Head>
+                    <Table.Head>Follow</Table.Head>
+                </Table.Row>
+            </Table.Header>
+            <Table.Body>
+                {#each [...firstSets.entries()] as [nonTerminal, firstSet]}
+                    <Table.Row>
+                        <Table.Cell class="font-medium">{nonTerminal}</Table.Cell>
+                        <Table.Cell>{[...firstSet].join(', ')}</Table.Cell>
+                        <Table.Cell>{[...followSets.get(nonTerminal) ?? []].join(', ')}</Table.Cell>
+                    </Table.Row>
+                {/each}
+            </Table.Body>
+        </Table.Root>
+    </div>
+{/if}
+
+<style>
+    /* Assicurati che le celle si adattino al contenuto */
+    :global(th), :global(td) {
+        white-space: normal !important;
+        word-wrap: break-word;
+    }
+</style>

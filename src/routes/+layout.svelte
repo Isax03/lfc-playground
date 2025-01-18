@@ -7,11 +7,11 @@
 </script>
 
 <ModeWatcher />
-<div class="min-h-[100svh] flex flex-col">
+<div class="min-h-[100svh] flex flex-col overflow-x-hidden">
     <Navbar />
-    <section
-        class="w-full p-5 h-full flex flex-grow"
-    >
-        {@render children?.()}
+    <section class="w-full p-4 h-full flex flex-grow">
+        <div class="w-full max-w-full overflow-x-hidden">
+            {@render children?.()}
+        </div>
     </section>
 </div>
