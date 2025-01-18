@@ -1,17 +1,30 @@
 import type { FirstSet, FirstSets } from "$lib/types/first-follow";
 import type { Grammar } from "$lib/types/grammar";
 
-// Funzione per calcolare il first di un singolo simbolo
-function computeFirstForSymbol(symbol: string, grammar: Grammar, firstSets: FirstSets): FirstSet {
-    if (grammar.T.has(symbol)  || symbol == 'ε') {
-        // Se il simbolo è un terminale o 'ε', il first è il simbolo stesso
+export function computeFirstForSymbol(
+    symbol: string, 
+    grammar: Grammar, 
+    firstSets: FirstSets,
+    processing: Set<string> = new Set()
+): FirstSet {
+    // Se il simbolo è un terminale o epsilon, il first è il simbolo stesso
+    if (grammar.T.has(symbol) || symbol === 'ε') {
         return new Set([symbol]);
     }
 
-    if (firstSets.has(symbol)) {
-        // Se abbiamo già calcolato il first per questo simbolo, lo restituiamo
+    // Se abbiamo già calcolato il first per questo simbolo, lo restituiamo
+    if (firstSets.has(symbol) && !processing.has(symbol)) {
         return firstSets.get(symbol)!;
     }
+
+    // Se stiamo già processando questo simbolo, restituiamo un set vuoto
+    // per evitare la ricorsione infinita
+    if (processing.has(symbol)) {
+        return new Set();
+    }
+
+    // Aggiungiamo il simbolo all'insieme dei simboli in elaborazione
+    processing.add(symbol);
 
     // Inizializziamo il set dei first per questo simbolo
     let firstSet = new Set<string>();
@@ -20,50 +33,67 @@ function computeFirstForSymbol(symbol: string, grammar: Grammar, firstSets: Firs
     for (const rule of grammar.P) {
         if (rule.nonTerminal === symbol) {
             for (const production of rule.productions) {
-                firstSet = firstSet.union(computeFirstForSequence(production, grammar, firstSets));
+                const sequenceFirst = computeFirstForSequence(production, grammar, firstSets, processing);
+                firstSet = new Set([...firstSet, ...sequenceFirst]);
             }
         }
     }
+
+    // Rimuoviamo il simbolo dall'insieme dei simboli in elaborazione
+    processing.delete(symbol);
+
+    // Memorizziamo il risultato
     firstSets.set(symbol, firstSet);
 
     return firstSet;
 }
 
-// Funzione per calcolare il first di una sequenza di simboli
-export function computeFirstForSequence(sequence: string[], grammar: Grammar, firstSets: FirstSets): FirstSet {
+export function computeFirstForSequence(
+    sequence: string[], 
+    grammar: Grammar, 
+    firstSets: FirstSets,
+    processing: Set<string> = new Set()
+): FirstSet {
     let firstSet = new Set<string>();
     let allNullable = true;
 
     for (const symbol of sequence) {
-        const firstOfSymbol = firstSets.get(symbol) ?? computeFirstForSymbol(symbol, grammar, firstSets);
+        const firstOfSymbol = computeFirstForSymbol(symbol, grammar, firstSets, processing);
+        
+        // Aggiungiamo tutti i simboli tranne epsilon
+        const nonEpsilonFirst = new Set([...firstOfSymbol].filter(s => s !== 'ε'));
+        firstSet = new Set([...firstSet, ...nonEpsilonFirst]);
 
-        firstSet = firstSet.union(firstOfSymbol.difference(new Set<string>(['ε'])));
-
+        // Se questo simbolo non può derivare epsilon, ci fermiamo
         if (!firstOfSymbol.has('ε')) {
             allNullable = false;
             break;
         }
     }
 
-    if (allNullable) {
+    // Se tutti i simboli sono nullable, aggiungiamo epsilon al risultato
+    if (allNullable && sequence.length > 0) {
         firstSet.add('ε');
     }
 
     return firstSet;
 }
 
-// Funzione principale per calcolare i first per tutti i non-terminali
 export function computeFirstSets(grammar: Grammar): FirstSets {
     const firstSets = new Map<string, Set<string>>();
-
-    for (const nonTerminal of grammar.N) {
-        computeFirstForSymbol(nonTerminal, grammar, firstSets);
-    }
-
-    // Rimuoviamo eventuali chiavi non valide (come 'ε') dalla mappa
-    for (const key of firstSets.keys()) {
-        if (!grammar.N.has(key)) {
-            firstSets.delete(key);
+    
+    // Calcoliamo i first per tutti i non-terminali
+    let changed = true;
+    while (changed) {
+        changed = false;
+        
+        for (const nonTerminal of grammar.N) {
+            const oldSize = firstSets.get(nonTerminal)?.size ?? 0;
+            const newFirst = computeFirstForSymbol(nonTerminal, grammar, firstSets);
+            
+            if (newFirst.size !== oldSize) {
+                changed = true;
+            }
         }
     }
 
