@@ -11,6 +11,12 @@ export function computeFollow(grammar: Grammar, firstSets: FirstSets): FollowSet
     }
     followSets.set(grammar.S, new Set(['$']));
 
+    // Mappa per tenere traccia delle dipendenze tra follow sets
+    const followDependencies = new Map<string, Set<string>>();
+    for (const nonTerminal of grammar.N) {
+        followDependencies.set(nonTerminal, new Set());
+    }
+
     let changed: boolean;
     do {
         changed = false;
@@ -32,23 +38,27 @@ export function computeFollow(grammar: Grammar, firstSets: FirstSets): FollowSet
                                 }
                             }
                             if (firstBeta.has('ε')) {
-                                const followB = followSets.get(B)!;
-                                for (const symbol of followB) {
-                                    if (!followA.has(symbol)) {
-                                        followA.add(symbol);
-                                        changed = true;
-                                    }
-                                }
+                                // Aggiungi una dipendenza: follow(A) dipende da follow(B)
+                                followDependencies.get(A)!.add(B);
                             }
                         } else {
-                            const followB = followSets.get(B)!;
-                            for (const symbol of followB) {
-                                if (!followA.has(symbol)) {
-                                    followA.add(symbol);
-                                    changed = true;
-                                }
-                            }
+                            // Aggiungi una dipendenza: follow(A) dipende da follow(B)
+                            followDependencies.get(A)!.add(B);
                         }
+                    }
+                }
+            }
+        }
+
+        // Propagazione degli aggiornamenti basata sulle dipendenze
+        for (const [A, dependencies] of followDependencies) {
+            const followA = followSets.get(A)!;
+            for (const B of dependencies) {
+                const followB = followSets.get(B)!;
+                for (const symbol of followB) {
+                    if (!followA.has(symbol)) {
+                        followA.add(symbol);
+                        changed = true;
                     }
                 }
             }
