@@ -20,9 +20,8 @@ export function computeFollow(grammar: Grammar, firstSets: FirstSets): FollowSet
     let changed: boolean;
     do {
         changed = false;
-        for (const rule of grammar.P) {
-            const B = rule.driver;
-            for (const production of rule.productions) {
+        for (const [nonTerminal, productions] of grammar.P) {
+            for (const production of productions) {
                 for (let i = 0; i < production.length; i++) {
                     const A = production[i];
                     if (grammar.N.has(A)) {
@@ -38,12 +37,10 @@ export function computeFollow(grammar: Grammar, firstSets: FirstSets): FollowSet
                                 }
                             }
                             if (firstBeta.has('ε')) {
-                                // Aggiungi una dipendenza: follow(A) dipende da follow(B)
-                                followDependencies.get(A)!.add(B);
+                                followDependencies.get(A)!.add(nonTerminal);
                             }
                         } else {
-                            // Aggiungi una dipendenza: follow(A) dipende da follow(B)
-                            followDependencies.get(A)!.add(B);
+                            followDependencies.get(A)!.add(nonTerminal);
                         }
                     }
                 }

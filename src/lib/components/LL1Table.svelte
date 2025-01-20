@@ -49,14 +49,14 @@
                                         <Table.Cell
                                             class="font-mono min-w-[100px] {table[
                                                 nonTerminal
-                                            ]?.[terminal]?.productions.length > 1
+                                            ]?.[terminal]?.get(nonTerminal)!!.length > 1
                                                 ? 'bg-red-100 dark:bg-red-900/20'
                                                 : ''}"
                                         >
-                                            {#if table[nonTerminal]?.[terminal]?.productions.length > 0}
+                                            {#if table[nonTerminal]?.[terminal]?.get(nonTerminal)!!.length > 0}
                                                 {nonTerminal} → {table[nonTerminal][
                                                     terminal
-                                                ].productions
+                                                ].get(nonTerminal)!!
                                                     .map((p) =>
                                                         p.length ? p.join(" ") : "ε"
                                                     )
@@ -67,14 +67,14 @@
                                     <Table.Cell
                                         class="font-mono min-w-[100px] {table[
                                             nonTerminal
-                                        ]?.['$']?.productions.length > 1
+                                        ]?.['$']?.get(nonTerminal)!!.length > 1
                                             ? 'bg-red-100 dark:bg-red-900/20'
                                             : ''}"
                                     >
-                                        {#if table[nonTerminal]?.["$"]?.productions.length > 0}
+                                        {#if table[nonTerminal]?.["$"]?.get(nonTerminal)!!.length > 0}
                                             {nonTerminal} → {table[nonTerminal][
                                                 "$"
-                                            ].productions
+                                            ].get(nonTerminal)!!
                                                 .map((p) =>
                                                     p.length ? p.join(" ") : "ε"
                                                 )

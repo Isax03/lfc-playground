@@ -29,13 +29,12 @@ export function computeFirstForSymbol(
     // Inizializziamo il set dei first per questo simbolo
     let firstSet = new Set<string>();
 
-    // Iteriamo su tutte le produzioni di questo non-terminale
-    for (const rule of grammar.P) {
-        if (rule.driver === symbol) {
-            for (const production of rule.productions) {
-                const sequenceFirst = computeFirstForSequence(production, grammar, firstSets, processing);
-                firstSet = new Set([...firstSet, ...sequenceFirst]);
-            }
+    // Ottieni le produzioni per questo simbolo
+    const productions = grammar.P.get(symbol);
+    if (productions) {
+        for (const production of productions) {
+            const sequenceFirst = computeFirstForSequence(production, grammar, firstSets, processing);
+            firstSet = new Set([...firstSet, ...sequenceFirst]);
         }
     }
 
@@ -97,15 +96,13 @@ export function computeFirstSets(grammar: Grammar): FirstSets {
 
         for (const nonTerminal of grammar.N) {
             const oldSize = firstSets.get(nonTerminal)!.size;
-
-            // Calcoliamo il nuovo FIRST per questo non-terminale
-            for (const rule of grammar.P) {
-                if (rule.driver === nonTerminal) {
-                    for (const production of rule.productions) {
-                        const sequenceFirst = computeFirstForSequence(production, grammar, firstSets);
-                        const currentFirst = firstSets.get(nonTerminal)!;
-                        sequenceFirst.forEach(symbol => currentFirst.add(symbol));
-                    }
+            const productions = grammar.P.get(nonTerminal);
+            
+            if (productions) {
+                for (const production of productions) {
+                    const sequenceFirst = computeFirstForSequence(production, grammar, firstSets);
+                    const currentFirst = firstSets.get(nonTerminal)!;
+                    sequenceFirst.forEach(symbol => currentFirst.add(symbol));
                 }
             }
 

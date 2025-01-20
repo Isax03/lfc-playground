@@ -1,35 +1,25 @@
-import type { Grammar, ProductionRule } from "$lib/types/grammar";
+import type { Grammar, Production } from "$lib/types/grammar";
 import { areProductionsEqual } from "../utils";
 
 export function parseGrammar(input: string, startSymbol?: string): Grammar {
     const lines = input.split("\n").filter((line) => line.trim() !== "");
-    const N = new Set<string>(); // Set of non-terminals
-    const T = new Set<string>(); // Set of terminals
-    const P: ProductionRule[] = []; // Productions
-    const symbolsInProductions = new Set<string>(); // Symbols appearing in the body of productions
+    const N = new Set<string>();
+    const T = new Set<string>();
+    const P = new Map<string, Production[]>();
+    const symbolsInProductions = new Set<string>();
 
     // Helper function to merge productions for the same non-terminal
-    const mergeProductions = (
-        nonTerminal: string,
-        newProductions: string[][]
-    ) => {
-        const existingRule = P.find((rule) => rule.driver === nonTerminal);
-        if (existingRule) {
-            // Merge new productions into the existing rule, avoiding duplicates
-            newProductions.forEach((newProd) => {
-                if (!existingRule.productions.some(p => areProductionsEqual(p, newProd))) {
-                    existingRule.productions.push(newProd);
-                }
-            });
-        } else {
-            // Add a new rule with deduplicated productions
-            const uniqueProductions = newProductions.filter((prod, index) => {
-                return !newProductions.some((p, i) => 
-                    i < index && areProductionsEqual(p, prod)
-                );
-            });
-            P.push({ driver: nonTerminal, productions: uniqueProductions });
-        }
+    const mergeProductions = (nonTerminal: string, newProductions: Production[]) => {
+        const existingProductions = P.get(nonTerminal) || [];
+        const mergedProductions = [...existingProductions];
+        
+        newProductions.forEach((newProd) => {
+            if (!mergedProductions.some(p => areProductionsEqual(p, newProd))) {
+                mergedProductions.push(newProd);
+            }
+        });
+        
+        P.set(nonTerminal, mergedProductions);
     };
 
     // Parse the grammar
@@ -54,7 +44,7 @@ export function parseGrammar(input: string, startSymbol?: string): Grammar {
         const productionRules = productions
             .split("|")
             .map((prod) => prod.trim());
-        const newProductions: string[][] = [];
+        const newProductions: Production[] = [];
 
         for (const prod of productionRules) {
             if (prod === "") {
@@ -105,7 +95,7 @@ export function parseGrammar(input: string, startSymbol?: string): Grammar {
         S = startSymbol;
     } else {
         // Use the non-terminal of the first production rule
-        S = P[0].driver;
+        S = Array.from(P.keys())[0];
     }
 
     return { N, T, S, P };
