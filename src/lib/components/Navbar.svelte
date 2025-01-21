@@ -9,10 +9,10 @@
     import Logo from "./Logo.svelte";
 
     const navItems = [
-        { href: "/", label: "Home" },
         { href: "/first-follow", label: "First & Follow" },
         { href: "/ll1-table", label: "LL(1) Table" },
         { href: "/left-rec", label: "Left Recursion" },
+        { href: "/left-fact", label: "Left Factoring" },
     ];
 
     const currentPath = $derived(page.url.pathname);

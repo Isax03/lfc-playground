@@ -16,6 +16,11 @@
             title: "Left Recursion",
             description: "Remove left recursion from your context-free grammar",
             href: "/left-rec"
+        },
+        {
+            title: "Left Factoring",
+            description: "Apply left factoring to your context-free grammar",
+            href: "/left-fact"
         }
     ];
 </script>
@@ -30,7 +35,7 @@
         A collection of tools for Language and Compilation course
     </p>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl w-full px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-screen-xl w-full px-4">
         {#each tools as tool}
             <a href={tool.href} 
                class="block p-6 border rounded-lg hover:bg-muted transition-colors duration-200">

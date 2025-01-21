@@ -6,7 +6,7 @@
     import type { Grammar } from "$lib/types/grammar";
     import { parseGrammar } from "$lib/utils/grammar/parse";
     import { stringifyGrammar } from "$lib/utils/grammar/pretty_print";
-    import { eliminateLeftRecursion } from "$lib/utils/ll1/left-recursion";
+    import { factorizeToLeft } from "$lib/utils/ll1/left-factorization";
     import { decodeGrammar } from "$lib/utils/sharing";
     import { onMount } from "svelte";
 
@@ -16,7 +16,7 @@
 
     function parseAndTransform() {
         const grammar: Grammar = parseGrammar(grammarInput);
-        const transformed = eliminateLeftRecursion(grammar);
+        const transformed = factorizeToLeft(grammar);
 
         // Format the transformed grammar
         transformedGrammar = stringifyGrammar(transformed);
@@ -47,16 +47,16 @@
 </script>
 
 <svelte:head>
-    <title>Left Recursion</title>
+    <title>Left Factoring</title>
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />
 
 <div class="flex flex-col gap-8 w-full max-w-screen-xl mx-auto px-4">
     <div>
-        <h1 class="text-3xl font-bold tracking-tight">Left Recursion</h1>
+        <h1 class="text-3xl font-bold tracking-tight">Left Factoring</h1>
         <p class="text-muted-foreground mt-2">
-            Remove left recursion from your context-free grammar
+            Apply left factoring to your context-free grammar
         </p>
     </div>
 
@@ -66,7 +66,7 @@
             <p class="mb-2 text-muted-foreground">
                 If you need the epsilon symbol, use `ε` or `epsilon`.
             </p>
-            <Textarea bind:value={grammarInput} class="w-72 h-60 font-mono" />
+            <Textarea bind:value={grammarInput} class="w-72 h-60 font-mono resize" />
             <div class="flex gap-2 mt-4">
                 <div class="flex items-center gap-2">
                     <Button onclick={parseAndTransform}>Compute</Button>
