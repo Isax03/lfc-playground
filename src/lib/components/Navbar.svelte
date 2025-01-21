@@ -12,6 +12,7 @@
         { href: "/", label: "Home" },
         { href: "/first-follow", label: "First & Follow" },
         { href: "/ll1-table", label: "LL(1) Table" },
+        { href: "/left-rec", label: "Left Recursion" },
     ];
 
     const currentPath = $derived(page.url.pathname);

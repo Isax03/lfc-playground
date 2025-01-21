@@ -9,18 +9,18 @@
     import { computeFollow } from "$lib/utils/first-follow/follow";
     import { computeLL1Table } from "$lib/utils/ll1/table";
     import { parseGrammar } from "$lib/utils/grammar/parse";
+    import ShareLink from "$lib/components/ShareLink.svelte";
+    import { onMount } from "svelte";
+    import { page } from "$app/state";
+    import { decodeGrammar } from "$lib/utils/sharing";
 
-    let grammarInput = $state(`E -> T E'
-E' -> + T E' | ε
-T -> F T'
-T' -> * F T' | ε
-F -> id | ( E )`);
+    let grammarInput = $state("");
 
     let grammar: Grammar = $state({
         N: new Set(),
         T: new Set(),
         S: "",
-        P: [],
+        P: new Map(),
     } as Grammar);
     let firstSets: FirstSets = $state(new Map());
     let followSets: FollowSets = $state(new Map());
@@ -38,6 +38,21 @@ F -> id | ( E )`);
             parseAndCompute();
         }
     }
+
+    onMount(() => {
+        let grammarParam = page.url.searchParams.get("grammar") || "";
+        if (grammarParam !== "") {
+            grammarInput = decodeGrammar(grammarParam) || grammarInput;
+            parseAndCompute();
+        }
+        else {
+            grammarInput = `E -> T E'
+E' -> + T E' | ε
+T -> F T'
+T' -> * F T' | ε
+F -> id | ( E )`;
+        }
+    });
 </script>
 
 <svelte:head>
@@ -46,7 +61,7 @@ F -> id | ( E )`);
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="flex flex-col gap-8 w-full max-w-screen-xl mx-auto">
+<div class="flex flex-col gap-8 w-full max-w-screen-xl mx-auto px-4">
     <div>
         <h1 class="text-3xl font-bold tracking-tight">LL(1) Parsing Table</h1>
         <p class="text-muted-foreground mt-2">
@@ -61,11 +76,20 @@ F -> id | ( E )`);
                 If you need the epsilon symbol, use `ε` or `epsilon`.
             </p>
             <Textarea bind:value={grammarInput} class="w-72 h-60 font-mono" />
-            <div class="flex items-center gap-2 my-4">
-                <Button onclick={parseAndCompute}>Compute</Button>
-                <kbd class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                    <span class="text-xs">Ctrl</span>+<span class="text-xs">Enter</span>
-                </kbd>
+            <div class="flex gap-2 mt-4">
+                <div class="flex items-center gap-2">
+                    <Button onclick={parseAndCompute}>Compute</Button>
+                    <kbd
+                        class="pointer-events-none h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground hidden md:inline-flex"
+                    >
+                        <span class="text-xs">Ctrl</span>+<span class="text-xs"
+                            >Enter</span
+                        >
+                    </kbd>
+                </div>
+                {#if firstSets.size > 0}
+                    <ShareLink grammar={grammarInput} />
+                {/if}
             </div>
             {#if ll1Result.notLL1}
                 <p class="text-red-500 w-max text-center">
