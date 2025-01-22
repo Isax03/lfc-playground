@@ -1,6 +1,8 @@
 <script lang="ts">
     import FirstTable from "$lib/components/FirstFollowTable.svelte";
     import LL1Table from "$lib/components/LL1Table.svelte";
+    import GrammarToolLayout from "$lib/components/GrammarToolLayout.svelte";
+    import ComputeButtonGroup from "$lib/components/ComputeButtonGroup.svelte";
     import Button from "$lib/shadcn-ui/components/ui/button/button.svelte";
     import { Textarea } from "$lib/shadcn-ui/components/ui/textarea";
     import type { FirstSets, FollowSets } from "$lib/types/first-follow";
@@ -13,6 +15,7 @@
     import { onMount } from "svelte";
     import { page } from "$app/state";
     import { decodeGrammar } from "$lib/utils/sharing";
+    import GrammarInput from "$lib/components/GrammarInput.svelte";
 
     let grammarInput = $state("");
 
@@ -61,48 +64,29 @@ F -> id | ( E )`;
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="flex flex-col gap-8 w-full max-w-screen-xl mx-auto px-4">
-    <div>
-        <h1 class="text-3xl font-bold tracking-tight">LL(1) Parsing Table</h1>
-        <p class="text-muted-foreground mt-2">
-            Calculate First, Follow sets and LL(1) parsing table for your context-free grammar
+{#snippet InputSection()}
+    <GrammarInput 
+        bind:value={grammarInput}
+        onCompute={parseAndCompute}
+        showShare={firstSets.size > 0}
+    />
+    {#if ll1Result.notLL1}
+        <p class="text-red-500 w-max text-center mt-2">
+            This grammar is not LL(1)<br/>Multiple productions found for some entries
         </p>
-    </div>
+    {/if}
+{/snippet}
 
-    <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Input Section -->
-        <div class="w-full lg:w-2/5">
-            <p class="mb-2 text-muted-foreground">
-                If you need the epsilon symbol, use `ε` or `epsilon`.
-            </p>
-            <Textarea bind:value={grammarInput} class="w-72 h-60 font-mono" />
-            <div class="flex gap-2 mt-4">
-                <div class="flex items-center gap-2">
-                    <Button onclick={parseAndCompute}>Compute</Button>
-                    <kbd
-                        class="pointer-events-none h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground hidden md:inline-flex"
-                    >
-                        <span class="text-xs">Ctrl</span>+<span class="text-xs"
-                            >Enter</span
-                        >
-                    </kbd>
-                </div>
-                {#if firstSets.size > 0}
-                    <ShareLink grammar={grammarInput} />
-                {/if}
-            </div>
-            {#if ll1Result.notLL1}
-                <p class="text-red-500 w-max text-center">
-                    This grammar is not LL(1)<br/>Multiple productions found for some
-                    entries
-                </p>
-            {/if}
-        </div>
-
-        <!-- Tables Section -->
-        <div class="w-full lg:w-3/5 flex flex-col gap-8">
-            <FirstTable {firstSets} {followSets} />
-            <LL1Table table={ll1Result.table} notLL1={ll1Result.notLL1} grammar={grammar} />
-        </div>
+{#snippet OutputSection()}
+    <div class="flex flex-col gap-8">
+        <FirstTable {firstSets} {followSets} />
+        <LL1Table table={ll1Result.table} notLL1={ll1Result.notLL1} {grammar} />
     </div>
-</div>
+{/snippet}
+
+<GrammarToolLayout
+    title="LL(1) Parsing Table"
+    description="Calculate First, Follow sets and LL(1) parsing table for your context-free grammar"
+    input={InputSection}
+    output={OutputSection}
+/>

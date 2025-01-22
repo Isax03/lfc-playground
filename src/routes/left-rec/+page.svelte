@@ -9,6 +9,9 @@
     import { eliminateLeftRecursion } from "$lib/utils/ll1/left-recursion";
     import { decodeGrammar } from "$lib/utils/sharing";
     import { onMount } from "svelte";
+    import GrammarToolLayout from "$lib/components/GrammarToolLayout.svelte";
+    import ComputeButtonGroup from "$lib/components/ComputeButtonGroup.svelte";
+    import GrammarInput from "$lib/components/GrammarInput.svelte";
 
     let grammarInput = $state("");
     let transformedGrammar = $state("");
@@ -52,54 +55,30 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="flex flex-col gap-8 w-full max-w-screen-xl mx-auto px-4">
-    <div>
-        <h1 class="text-3xl font-bold tracking-tight">Left Recursion</h1>
-        <p class="text-muted-foreground mt-2">
-            Remove left recursion from your context-free grammar
-        </p>
-    </div>
+{#snippet InputSection()}
+    <GrammarInput 
+        bind:value={grammarInput}
+        onCompute={parseAndTransform}
+        showShare={showOutput}
+    />
+{/snippet}
 
-    <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Input Section -->
-        <div class="w-full lg:w-2/5">
-            <p class="mb-2 text-muted-foreground">
-                If you need the epsilon symbol, use `ε` or `epsilon`.
-            </p>
-            <Textarea bind:value={grammarInput} class="w-72 h-60 font-mono" />
-            <div class="flex gap-2 mt-4">
-                <div class="flex items-center gap-2">
-                    <Button onclick={parseAndTransform}>Compute</Button>
-                    <kbd
-                        class="pointer-events-none h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground hidden md:inline-flex"
-                    >
-                        <span class="text-xs">Ctrl</span>+<span class="text-xs"
-                            >Enter</span
-                        >
-                    </kbd>
-                </div>
-                {#if showOutput}
-                    <ShareLink grammar={grammarInput} />
-                {/if}
+{#snippet OutputSection()}
+    {#if showOutput && transformedGrammar}
+        <div class="w-max max-w-full h-max flex flex-col">
+            <h5 class="mb-4 text-lg font-medium tracking-tight">Resulting Grammar</h5>
+            <div class="w-max max-w-full">
+                <p class="p-4 max-w-full bg-muted rounded-md font-mono whitespace-pre-wrap break-words">
+                    {transformedGrammar}
+                </p>
             </div>
         </div>
+    {/if}
+{/snippet}
 
-        <!-- Output Section -->
-        <div class="w-full lg:w-3/5">
-            {#if showOutput && transformedGrammar}
-                <div class="w-max max-w-full h-max flex flex-col">
-                    <h5 class="mb-4 text-lg font-medium tracking-tight">
-                        Resulting Grammar
-                    </h5>
-                    <div class="w-max max-w-full">
-                        <p
-                            class="p-4 max-w-full bg-muted rounded-md font-mono whitespace-pre-wrap break-words"
-                        >
-                            {transformedGrammar}
-                        </p>
-                    </div>
-                </div>
-            {/if}
-        </div>
-    </div>
-</div>
+<GrammarToolLayout
+    title="Left Recursion"
+    description="Remove left recursion from your context-free grammar"
+    input={InputSection}
+    output={OutputSection}
+/>

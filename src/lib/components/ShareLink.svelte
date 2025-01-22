@@ -28,7 +28,7 @@
 </script>
 
 <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "outline", size: "sm" })}>
+    <Dialog.Trigger class={buttonVariants({ variant: "outline", size: "default" })}>
         <Share2 class="h-4 w-4 mr-2" />
         <span>Share</span>
     </Dialog.Trigger>
