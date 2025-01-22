@@ -42,7 +42,7 @@
 >
     <h1 class="text-4xl font-bold">Welcome to LFC Playground</h1>
     <p class="text-xl text-muted-foreground max-w-[600px]">
-        A collection of tools for Language and Compilation course
+        A collection of tools for Formal Languages and Compilators course
     </p>
 
     <div

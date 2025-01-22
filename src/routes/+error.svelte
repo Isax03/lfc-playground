@@ -38,14 +38,14 @@
         Error {page.status}
     </p>
 
-    <div class="flex gap-4">
+    <div class="flex flex-col sm:flex-row gap-4">
         <Button href="/" variant="outline">
             <Home class="w-4 h-4 mr-2" />
             Return Home
         </Button>
         <Button href={getRandomTool()} variant="outline">
             <Shuffle class="w-4 h-4 mr-2" />
-            Try Random Tool
+            Execute Random Tool ⚡
         </Button>
     </div>
 </div>
