@@ -1,3 +1,7 @@
+/**
+ * Represents a formal grammar
+ * defined as a 4-tuple (N, T, S, P)
+ */
 export type Grammar = {
     N: Set<string>;    // Set of non-terminals
     T: Set<string>;    // Set of terminals
@@ -5,6 +9,12 @@ export type Grammar = {
     P: ProductionRule; // Map of productions
 };
 
-export type ProductionRule = Map<string, Production[]>; // Productions map from driver to array of productions
+/**
+ * Maps non-terminal symbols to their production rules
+ */
+export type ProductionRule = Map<string, Production[]>;
 
+/**
+ * Represents a single production rule as an array of symbols
+ */
 export type Production = string[];

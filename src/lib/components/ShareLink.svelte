@@ -20,6 +20,7 @@
     let copied = $state(false);
     let shareUrl = $derived(createShareableLink(path, grammar));
 
+    // Show feedback for 2 seconds after copying
     async function copyToClipboard() {
         await navigator.clipboard.writeText(shareUrl);
         copied = true;

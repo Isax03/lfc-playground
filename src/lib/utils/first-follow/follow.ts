@@ -5,13 +5,13 @@ import { computeFirstForSequence } from "./first";
 export function computeFollow(grammar: Grammar, firstSets: FirstSets): FollowSets {
     let followSets = new Map<string, FollowSet>();
 
-    // Inizializziamo il follow set per tutti i non-terminali
+    // Initialize follow sets for all non-terminals
     for (const nonTerminal of grammar.N) {
         followSets.set(nonTerminal, new Set());
     }
     followSets.set(grammar.S, new Set(['$']));
 
-    // Mappa per tenere traccia delle dipendenze tra follow sets
+    // Map to track dependencies between follow sets
     const followDependencies = new Map<string, Set<string>>();
     for (const nonTerminal of grammar.N) {
         followDependencies.set(nonTerminal, new Set());
@@ -47,7 +47,7 @@ export function computeFollow(grammar: Grammar, firstSets: FirstSets): FollowSet
             }
         }
 
-        // Propagazione degli aggiornamenti basata sulle dipendenze
+        // Propagation of updates based on dependencies
         for (const [A, dependencies] of followDependencies) {
             const followA = followSets.get(A)!;
             for (const B of dependencies) {

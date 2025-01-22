@@ -12,24 +12,23 @@ export function computeFirstForSymbol(
         return new Set([symbol]);
     }
 
-    // Se abbiamo già calcolato il first per questo simbolo, lo restituiamo
+    // If we've already computed First for this symbol and it's not being processed, return it
     if (firstSets.has(symbol) && !processing.has(symbol)) {
         return firstSets.get(symbol)!;
     }
 
-    // Se stiamo già processando questo simbolo, restituiamo un set vuoto
-    // per evitare la ricorsione infinita
+    // If we're already processing this symbol, return empty set to avoid infinite recursion
     if (processing.has(symbol)) {
         return new Set();
     }
 
-    // Aggiungiamo il simbolo all'insieme dei simboli in elaborazione
+    // Add symbol to processing set to track recursive calls
     processing.add(symbol);
 
-    // Inizializziamo il set dei first per questo simbolo
+    // Initialize First set for this symbol
     let firstSet = new Set<string>();
 
-    // Ottieni le produzioni per questo simbolo
+    // Get productions for this symbol and compute First sets
     const productions = grammar.P.get(symbol);
     if (productions) {
         for (const production of productions) {
@@ -60,11 +59,11 @@ export function computeFirstForSequence(
         const symbol = sequence[i];
         const firstOfSymbol = computeFirstForSymbol(symbol, grammar, firstSets, processing);
 
-        // Aggiungiamo tutti i simboli tranne epsilon
+        // Add all symbols except epsilon
         const nonEpsilonFirst = new Set([...firstOfSymbol].filter(s => s !== 'ε'));
         firstSet = new Set([...firstSet, ...nonEpsilonFirst]);
 
-        // Se questo simbolo non può derivare epsilon, ci fermiamo
+        // Stop if this symbol cannot derive epsilon
         if (!firstOfSymbol.has('ε')) {
             allNullable = false;
             break;
@@ -73,7 +72,7 @@ export function computeFirstForSequence(
         // Se il simbolo è annullabile, continuiamo a considerare il prossimo simbolo nella sequenza
     }
 
-    // Se tutti i simboli sono annullabili, aggiungiamo epsilon al risultato
+    // If all symbols can derive epsilon, add epsilon to the result
     if (allNullable && sequence.length > 0) {
         firstSet.add('ε');
     }

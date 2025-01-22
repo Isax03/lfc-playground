@@ -11,6 +11,7 @@
 
     let { table, notLL1, grammar }: Props = $props();
 
+    // Sort symbols for consistent table display
     const terminals = $derived([...grammar.T].sort());
     const nonTerminals = $derived([...grammar.N].sort());
     const hasData = $derived(nonTerminals.length > 0 && terminals.length > 0);

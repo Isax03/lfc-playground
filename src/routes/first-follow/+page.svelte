@@ -1,9 +1,8 @@
 <script lang="ts">
     import { page } from "$app/state";
     import FirstTable from "$lib/components/FirstFollowTable.svelte";
+    import GrammarInput from "$lib/components/GrammarInput.svelte";
     import GrammarToolLayout from "$lib/components/GrammarToolLayout.svelte";
-    import ComputeButtonGroup from "$lib/components/ComputeButtonGroup.svelte";
-    import { Textarea } from "$lib/shadcn-ui/components/ui/textarea";
     import type { FirstSets, FollowSets } from "$lib/types/first-follow";
     import type { Grammar } from "$lib/types/grammar";
     import { computeFirstSets } from "$lib/utils/first-follow/first";
@@ -11,7 +10,6 @@
     import { parseGrammar } from "$lib/utils/grammar/parse";
     import { decodeGrammar } from "$lib/utils/sharing";
     import { onMount } from "svelte";
-    import GrammarInput from "$lib/components/GrammarInput.svelte";
 
     let grammarInput = $state("");
 
@@ -24,12 +22,18 @@
     let firstSets: FirstSets = $state(new Map());
     let followSets: FollowSets = $state(new Map());
 
+    /**
+     * Parses the grammar input and computes First and Follow sets
+     */
     function parseAndCompute() {
         grammar = parseGrammar(grammarInput);
         firstSets = computeFirstSets(grammar);
         followSets = computeFollow(grammar, firstSets);
     }
 
+    /**
+     * Handles Ctrl+Enter keyboard shortcut to trigger computation
+     */
     function handleKeydown(event: KeyboardEvent) {
         if (event.ctrlKey && event.key === "Enter") {
             parseAndCompute();
@@ -37,6 +41,7 @@
     }
 
     onMount(() => {
+        // Load grammar from URL parameters if available, otherwise use example grammar
         let grammarParam = page.url.searchParams.get("grammar") || "";
         if (grammarParam !== "") {
             grammarInput = decodeGrammar(grammarParam) || grammarInput;
@@ -58,7 +63,7 @@ F -> id | ( E )`;
 <svelte:window onkeydown={handleKeydown} />
 
 {#snippet InputSection()}
-    <GrammarInput 
+    <GrammarInput
         bind:value={grammarInput}
         onCompute={parseAndCompute}
         showShare={firstSets.size > 0}

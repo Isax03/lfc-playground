@@ -1,6 +1,20 @@
 import type { Grammar, Production } from "$lib/types/grammar";
 import { areProductionsEqual } from "../utils";
 
+/**
+ * Parses a context-free grammar from a string representation.
+ * Expected format:
+ * - Each line represents a production rule
+ * - Left and right sides separated by ->
+ * - Multiple productions for same non-terminal separated by |
+ * - Symbols separated by whitespace
+ * - 'epsilon' or 'ε' represents empty string
+ * 
+ * Example:
+ * S -> A B | C
+ * A -> a A | epsilon
+ * B -> b
+ */
 export function parseGrammar(input: string, startSymbol?: string): Grammar {
     const lines = input.split("\n").filter((line) => line.trim() !== "");
     const N = new Set<string>();

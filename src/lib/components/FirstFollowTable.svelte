@@ -3,17 +3,21 @@
     import type { FirstSets, FollowSets } from "$lib/types/first-follow";
     import { sortSetElements } from "$lib/utils/sets";
 
-    export let firstSets: FirstSets;
-    export let followSets: FollowSets;
+    interface Props {
+        firstSets: FirstSets;
+        followSets: FollowSets;
+    }
 
-    $: hasData = firstSets.size > 0;
+    let { firstSets, followSets }: Props = $props();
 
-    // Get sorted non-terminals
-    $: nonTerminals = [...firstSets.keys()].sort();
+    // Check if there's data to display
+    let hasData = $derived(firstSets.size > 0);
+
+    // Get sorted list of non-terminals
+    let nonTerminals = $derived([...firstSets.keys()].sort());
 </script>
 
-
-
+<!-- Display First and Follow sets in a table -->
 {#if hasData}
     <div class="w-full border rounded-md">
         <Table.Root class="w-full">
@@ -38,7 +42,7 @@
 {/if}
 
 <style>
-    /* Assicurati che le celle si adattino al contenuto */
+    /* Ensure cells adapt to content */
     :global(th), :global(td) {
         white-space: normal !important;
         word-wrap: break-word;

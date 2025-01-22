@@ -1,21 +1,17 @@
 <script lang="ts">
+    import { page } from "$app/state";
     import FirstTable from "$lib/components/FirstFollowTable.svelte";
-    import LL1Table from "$lib/components/LL1Table.svelte";
+    import GrammarInput from "$lib/components/GrammarInput.svelte";
     import GrammarToolLayout from "$lib/components/GrammarToolLayout.svelte";
-    import ComputeButtonGroup from "$lib/components/ComputeButtonGroup.svelte";
-    import Button from "$lib/shadcn-ui/components/ui/button/button.svelte";
-    import { Textarea } from "$lib/shadcn-ui/components/ui/textarea";
+    import LL1Table from "$lib/components/LL1Table.svelte";
     import type { FirstSets, FollowSets } from "$lib/types/first-follow";
     import type { Grammar } from "$lib/types/grammar";
     import { computeFirstSets } from "$lib/utils/first-follow/first";
     import { computeFollow } from "$lib/utils/first-follow/follow";
-    import { computeLL1Table } from "$lib/utils/ll1/table";
     import { parseGrammar } from "$lib/utils/grammar/parse";
-    import ShareLink from "$lib/components/ShareLink.svelte";
-    import { onMount } from "svelte";
-    import { page } from "$app/state";
+    import { computeLL1Table } from "$lib/utils/ll1/table";
     import { decodeGrammar } from "$lib/utils/sharing";
-    import GrammarInput from "$lib/components/GrammarInput.svelte";
+    import { onMount } from "svelte";
 
     let grammarInput = $state("");
 
@@ -29,6 +25,9 @@
     let followSets: FollowSets = $state(new Map());
     let ll1Result = $state({ table: {}, notLL1: false });
 
+    /**
+     * Parses the grammar input and computes First sets, Follow sets and LL(1) table
+     */
     function parseAndCompute() {
         grammar = parseGrammar(grammarInput);
         firstSets = computeFirstSets(grammar);
@@ -36,19 +35,22 @@
         ll1Result = computeLL1Table(grammar, firstSets, followSets);
     }
 
+    /**
+     * Handles Ctrl+Enter keyboard shortcut to trigger computation
+     */
     function handleKeydown(event: KeyboardEvent) {
-        if (event.ctrlKey && event.key === 'Enter') {
+        if (event.ctrlKey && event.key === "Enter") {
             parseAndCompute();
         }
     }
 
     onMount(() => {
+        // Load grammar from URL parameters if available, otherwise use example grammar
         let grammarParam = page.url.searchParams.get("grammar") || "";
         if (grammarParam !== "") {
             grammarInput = decodeGrammar(grammarParam) || grammarInput;
             parseAndCompute();
-        }
-        else {
+        } else {
             grammarInput = `E -> T E'
 E' -> + T E' | ε
 T -> F T'
@@ -65,14 +67,15 @@ F -> id | ( E )`;
 <svelte:window onkeydown={handleKeydown} />
 
 {#snippet InputSection()}
-    <GrammarInput 
+    <GrammarInput
         bind:value={grammarInput}
         onCompute={parseAndCompute}
         showShare={firstSets.size > 0}
     />
     {#if ll1Result.notLL1}
         <p class="text-red-500 w-max text-center mt-2">
-            This grammar is not LL(1)<br/>Multiple productions found for some entries
+            This grammar is not LL(1)<br />Multiple productions found for some
+            entries
         </p>
     {/if}
 {/snippet}

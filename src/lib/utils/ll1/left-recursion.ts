@@ -1,5 +1,14 @@
 import type { Grammar, Production } from "$lib/types/grammar";
 
+/**
+ * Eliminates left recursion from a grammar using the standard algorithm:
+ * 1. First eliminates indirect left recursion by substituting productions
+ * 2. Then eliminates direct left recursion by introducing new non-terminals
+ * 
+ * For a production A → Aα | β, creates:
+ * A → βA'
+ * A' → αA' | ε
+ */
 export function eliminateLeftRecursion(grammar: Grammar): Grammar {
     const newGrammar: Grammar = {
         N: new Set(grammar.N),
@@ -77,6 +86,16 @@ export function eliminateLeftRecursion(grammar: Grammar): Grammar {
             newGrammar.N.add(helperName);
             newGrammar.P.set(nonTerminals[i], newProductions);
             newGrammar.P.set(helperName, helperProductions);
+        }
+    }
+
+    // Remove empty productions
+    for (const [nonTerminal, productions] of newGrammar.P) {
+        const newProductions = productions.filter((production) => production.length > 0);
+        if (newProductions.length === 0) {
+            newGrammar.P.delete(nonTerminal);
+        } else {
+            newGrammar.P.set(nonTerminal, newProductions);
         }
     }
 

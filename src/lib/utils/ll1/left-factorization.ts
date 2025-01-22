@@ -1,10 +1,23 @@
 import type { Grammar, Production } from "$lib/types/grammar";
 
+/**
+ * Helper function to compare two arrays of symbols for equality
+ */
 function arrayEqual(a: string[], b: string[]): boolean {
     if (a.length !== b.length) return false;
     return a.every((val, idx) => val === b[idx]);
 }
 
+/**
+ * Performs left factorization on a grammar to eliminate common prefixes.
+ * For productions like:
+ * A → αβ1 | αβ2
+ * Creates:
+ * A → αA'
+ * A' → β1 | β2
+ * 
+ * Continues until no common prefixes remain.
+ */
 export function factorizeToLeft(grammar: Grammar): Grammar {
     const newGrammar: Grammar = {
         N: new Set(grammar.N),
