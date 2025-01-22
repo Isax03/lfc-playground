@@ -5,7 +5,7 @@
     import type { Grammar } from "$lib/types/grammar";
     import { parseGrammar } from "$lib/utils/grammar/parse";
     import { stringifyGrammar } from "$lib/utils/grammar/pretty_print";
-    import { eliminateLeftRecursion } from "$lib/utils/ll1/left-recursion";
+    import { transformToCnf } from "$lib/utils/cnf/transform";
     import { decodeGrammar } from "$lib/utils/sharing";
     import { onMount } from "svelte";
 
@@ -18,7 +18,7 @@
      */
     function parseAndTransform() {
         const grammar: Grammar = parseGrammar(grammarInput);
-        const transformed = eliminateLeftRecursion(grammar);
+        const transformed = transformToCnf(grammar);
 
         // Format the transformed grammar
         transformedGrammar = stringifyGrammar(transformed);
@@ -52,7 +52,7 @@
 </script>
 
 <svelte:head>
-    <title>Left Recursion - LFC Playground</title>
+    <title>CNF - LFC Playground</title>
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -83,8 +83,8 @@
 {/snippet}
 
 <GrammarToolLayout
-    title="Left Recursion"
-    description="Remove left recursion from your context-free grammar"
+    title="Chomsky Normal Form"
+    description="Convert a context-free grammar to Chomsky Normal Form (CNF)"
     input={InputSection}
     output={OutputSection}
 />

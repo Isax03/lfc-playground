@@ -13,6 +13,7 @@
         { href: "/ll1-table", label: "LL(1) Table" },
         { href: "/left-rec", label: "Left Recursion" },
         { href: "/left-fact", label: "Left Factoring" },
+        { href: "/cnf", label: "CNF" },
     ];
 
     const currentPath = $derived(page.url.pathname);

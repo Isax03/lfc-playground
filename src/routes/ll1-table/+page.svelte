@@ -61,7 +61,7 @@ F -> id | ( E )`;
 </script>
 
 <svelte:head>
-    <title>LL(1) Parsing Table</title>
+    <title>LL(1) Parsing Table - LFC Playground</title>
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />

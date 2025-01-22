@@ -25,6 +25,11 @@
             description: "Apply left factoring to your context-free grammar",
             href: "/left-fact",
         },
+        {
+            title: "Chomsky Normal Form",
+            description: "Convert a context-free grammar to Chomsky Normal Form (CNF)",
+            href: "/cnf",
+        },
     ];
 </script>
 

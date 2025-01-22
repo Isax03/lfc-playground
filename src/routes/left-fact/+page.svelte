@@ -52,7 +52,7 @@
 </script>
 
 <svelte:head>
-    <title>Left Factoring</title>
+    <title>Left Factoring - LFC Playground</title>
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />
