@@ -9,9 +9,9 @@ Ogni tipo di contributo è ben accetto, se avete suggerimenti, correzioni o nuov
 ## Features disponibili e future
 - [x] Calcolo di FIRST e FOLLOW per una grammatica
 - [x] Costruzione di una tabella di parsing LL(1) per una grammatica
-- [ ] Parsing di una stringa con una tabella di parsing LL(1) e visualizzazione dell'albero di parsing
+- [x] Parsing di una stringa con una tabella di parsing LL(1) e visualizzazione dell'albero di parsing
 - [x] Rimozione di ricorsione a sinistra da una grammatica
 - [x] Fattorizzazione di una grammatica
-- [ ] Conversione di una grammatica in forma normale di Chomsky
+- [x] Conversione di una grammatica in forma normale di Chomsky
 - [ ] Costuzione di un automa a stati finiti da una regex
 - [ ] Costuzione della tabella di parsing SLR(1) per una grammatica
