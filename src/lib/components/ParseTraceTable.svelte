@@ -9,7 +9,7 @@
     let { trace }: Props = $props();
 </script>
 
-<div class="flex flex-col h-full">
+<div class="flex flex-col h-full table-div">
     <h5 class="mb-4 text-lg font-medium tracking-tight">Parsing Trace</h5>
     <div class="w-full border rounded-md overflow-auto flex-1">
         <Table.Root>
@@ -42,16 +42,16 @@
 </div>
 
 <style>
-    :global(table) {
+    .table-div :global(table) {
         width: 100%;
         table-layout: fixed;
     }
 
-    :global(th) {
+    .table-div :global(th) {
         border-bottom: 1px solid var(--border);
     }
 
-    :global(th), :global(td) {
+    .table-div :global(th), .table-div :global(td) {
         padding: 0.5rem;
         text-align: left;
         overflow: hidden;
@@ -59,7 +59,7 @@
     }
 
     @media (max-width: 640px) {
-        :global(th), :global(td) {
+        .table-div :global(th), .table-div :global(td) {
             padding: 0.25rem;
             font-size: 0.75rem;
         }
