@@ -14,6 +14,7 @@
         { href: "/left-rec", label: "Left Recursion" },
         { href: "/left-fact", label: "Left Factoring" },
         { href: "/cnf", label: "CNF" },
+        { href: "/slr-table", label: "SLR Table" },
     ];
 
     const currentPath = $derived(page.url.pathname);
