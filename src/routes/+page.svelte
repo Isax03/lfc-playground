@@ -30,6 +30,12 @@
             description: "Convert a context-free grammar to Chomsky Normal Form (CNF)",
             href: "/cnf",
         },
+        {
+            title: "SLR Parsing Table",
+            description:
+                "Generate SLR Automaton (table to be implemented) with steps",
+            href: "/slr-table",
+        },
     ];
 </script>
 
