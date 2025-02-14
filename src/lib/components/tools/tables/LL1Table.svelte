@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Grammar } from "$lib/types/grammar";
-    import type { LL1Table } from "$lib/types/tables";
+    import type { LL1Table } from "$lib/types/ll1";
     import * as Table from "$lib/shadcn-ui/components/ui/table";
 
     interface Props {

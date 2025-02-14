@@ -8,7 +8,7 @@
     import { writable } from "svelte/store"
 
     import "@xyflow/svelte/dist/style.css";
-    import TreeNode from "./tree/TreeNode.svelte";
+    import TreeNode from "./TreeNode.svelte";
     import type { TreeNode as TreeNodeType } from "$lib/types/tree";
 
     interface Props {

@@ -1,6 +1,6 @@
 import type { TreeNode } from "$lib/types/tree";
 import type { Grammar } from "$lib/types/grammar";
-import type { LL1Table } from "$lib/types/tables";
+import type { LL1Table } from "$lib/types/ll1";
 import type { ParseResult, ParseStep } from "$lib/types/parse";
 
 export function ll1Parsing(input: string, table: LL1Table, grammar: Grammar): ParseResult {

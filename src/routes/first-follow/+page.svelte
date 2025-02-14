@@ -1,8 +1,8 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import FirstTable from "$lib/components/FirstFollowTable.svelte";
-    import GrammarInput from "$lib/components/GrammarInput.svelte";
-    import GrammarToolLayout from "$lib/components/GrammarToolLayout.svelte";
+    import FirstTable from "$lib/components/tools/tables/FirstFollowTable.svelte";
+    import GrammarInput from "$lib/components/tools/GrammarInput.svelte";
+    import GrammarToolLayout from "$lib/components/tools/GrammarToolLayout.svelte";
     import type { FirstSets, FollowSets } from "$lib/types/first-follow";
     import type { Grammar } from "$lib/types/grammar";
     import { computeFirstSets } from "$lib/utils/first-follow/first";

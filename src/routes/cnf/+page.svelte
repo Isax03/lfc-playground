@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import GrammarInput from "$lib/components/GrammarInput.svelte";
-    import GrammarToolLayout from "$lib/components/GrammarToolLayout.svelte";
+    import GrammarInput from "$lib/components/tools/GrammarInput.svelte";
+    import GrammarToolLayout from "$lib/components/tools/GrammarToolLayout.svelte";
     import type { Grammar } from "$lib/types/grammar";
     import { parseGrammar } from "$lib/utils/grammar/parse";
     import { stringifyGrammar } from "$lib/utils/grammar/pretty_print";

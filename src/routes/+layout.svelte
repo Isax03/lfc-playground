@@ -1,6 +1,6 @@
 <!-- Base layout component that provides the app structure and theme management -->
 <script lang="ts">
-    import Navbar from "$lib/components/Navbar.svelte";
+    import Navbar from "$lib/components/generic/Navbar.svelte";
     import "../app.css";
 
     import { ModeWatcher } from "mode-watcher";

@@ -1,6 +1,6 @@
 import type { Production, Grammar } from "$lib/types/grammar";
 import type { FirstSets, FollowSets } from "$lib/types/first-follow";
-import type { LL1Table } from "$lib/types/tables";
+import type { LL1Table } from "$lib/types/ll1";
 import { computeFirstForSequence } from "../first-follow/first";
 import { areProductionsEqual } from "../utils";
 
