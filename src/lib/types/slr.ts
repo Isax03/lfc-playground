@@ -1,4 +1,3 @@
-import { TreePine } from "lucide-svelte";
 import type { ProductionRule } from "./grammar";
 
 /**
@@ -27,8 +26,8 @@ export type AutomatonStep = {
     symbol?: string;          // The symbol being processed (undefined for initial state)
     fromStateId?: string;     // The source state (undefined for initial state)
     closure?: Closure;        // The full closure containing both kernel and body
-    kernel?: ProductionRule;  // Add this
-    isExistingState?: boolean;  // Add this
+    kernel?: ProductionRule;
+    isExistingState?: boolean;
 }
 
 export type AutomatonBuildResult = {

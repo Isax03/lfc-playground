@@ -12,7 +12,7 @@
 <div class="flex flex-col h-full table-div">
     <h5 class="mb-4 text-lg font-medium tracking-tight">Parsing Trace</h5>
     <div class="w-full border rounded-md overflow-auto flex-1">
-        <Table.Root>
+        <Table.Root class="h-max">
             <Table.Header>
                 <Table.Row>
                     <Table.Head class="font-mono whitespace-nowrap bg-background sticky top-0 z-10">Stack</Table.Head>

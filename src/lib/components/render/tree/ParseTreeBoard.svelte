@@ -38,6 +38,7 @@
         nodesConnectable={false}
         elementsSelectable={false}
         {nodeTypes}
+        fitView
         class="rounded-md"
     >
         <Background />

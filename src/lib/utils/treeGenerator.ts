@@ -49,6 +49,7 @@ export function convertToFlowNodes(tree: TreeNode): { nodes: Node[], edges: Edge
         if (parentId) {
             edges.push({
                 id: `edge_${parentId}_${currentId}`,
+                type: 'straight',
                 source: parentId,
                 target: currentId,
             });

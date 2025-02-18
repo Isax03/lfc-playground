@@ -9,6 +9,7 @@
     import { Textarea } from "$lib/shadcn-ui/components/ui/textarea";
     import { page } from "$app/state";
     import Label from "$lib/shadcn-ui/components/ui/label/label.svelte";
+    import { Root } from "$lib/shadcn-ui/components/ui/button";
 
     interface Props {
         grammar: string;
