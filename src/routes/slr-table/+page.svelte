@@ -118,14 +118,6 @@ B -> d`;
             <AutomatonStepsTable {steps} />
         {/if}
 
-        {#if automaton !== null}
-            <div
-                class="h-[600px] w-full flex items-center justify-center border rounded-lg"
-            >
-                <AutomatonBoard {automaton} />
-            </div>
-        {/if}
-
         <!-- <SLRTable table={ll1Result.table} {grammar} /> -->
     </div>
 {/snippet}
@@ -137,6 +129,14 @@ B -> d`;
         input={InputSection}
         output={OutputSection}
     />
+
+        {#if automaton !== null}
+            <div
+                class="h-[600px] w-full flex items-center justify-center border rounded-lg"
+            >
+                <AutomatonBoard {automaton} />
+            </div>
+        {/if}
     <!-- {#if firstSets.size > 0 /* && !ll1Result.notLL1 */}
         <div class="p-4 border rounded-lg mx-4 md:mx-32">
             <div class="max-w-full md:max-w-lg">

@@ -33,16 +33,14 @@
         const midX = (sourceX + targetX) / 2;
         const midY = (sourceY + targetY) / 2;
 
-        // Calcola il vettore perpendicolare
         const dx = targetX - sourceX;
         const dy = targetY - sourceY;
         const length = Math.sqrt(dx * dx + dy * dy);
 
-        // Offset perpendicolare
-        const offsetX = (-dy / length) * 30;
-        const offsetY = (dx / length) * 30;
+        // Aumentato l'offset per creare un arco più ampio
+        const offsetX = (-dy / length) * 50; // aumentato da 30 a 50
+        const offsetY = (dx / length) * 50;
 
-        // Il punto di controllo è spostato perpendicolarmente alla linea
         const controlX = midX + offsetX;
         const controlY = midY + offsetY;
 
@@ -94,9 +92,83 @@
         }
     }
 
+    // Aggiungi questa funzione per calcolare il punto medio del path
+    function getPathMidpoint(path: SVGPathElement): { x: number; y: number } {
+        const length = path.getTotalLength();
+        const midPoint = path.getPointAtLength(length / 2);
+        return { x: midPoint.x, y: midPoint.y };
+    }
+
+    function calculateLabelOffset(
+        sourceX: number,
+        sourceY: number,
+        targetX: number,
+        targetY: number,
+        isBidirectional: boolean
+    ): { dx: number; dy: number } {
+        const dx = targetX - sourceX;
+        const dy = targetY - sourceY;
+        const angle = Math.atan2(dy, dx);
+        const degrees = angle * (180 / Math.PI);
+        
+        // Aumentato l'offset di base per le label
+        const baseOffset = isBidirectional ? 40 : 25; // aumentato per gli archi bidirezionali
+        
+        if (isBidirectional) {
+            const shouldBeAbove = parseInt(source) < parseInt(target);
+            
+            if (Math.abs(degrees) > 45 && Math.abs(degrees) < 135) {
+                // Per archi verticali, sposta le label ancora più lateralmente
+                return {
+                    dx: shouldBeAbove ? baseOffset : -baseOffset,
+                    dy: 0
+                };
+            } else {
+                // Per archi orizzontali, sposta le label più in alto/basso
+                return {
+                    dx: 0,
+                    dy: shouldBeAbove ? -baseOffset : baseOffset
+                };
+            }
+        }
+        
+        // Per archi non bidirezionali, mantieni il comportamento precedente
+        if (Math.abs(degrees) > 45 && Math.abs(degrees) < 135) {
+            return {
+                dx: baseOffset,
+                dy: 0
+            };
+        }
+        
+        return {
+            dx: 0,
+            dy: -baseOffset
+        };
+    }
+
+    let pathElement: SVGPathElement;
+    let midPoint = { x: 0, y: 0 };
+    let labelOffset = { dx: 0, dy: -10 };
+    let isBidirectional: boolean;
+
+    $: if (pathElement && edgePath) {
+        midPoint = getPathMidpoint(pathElement);
+    }
+
     $: {
         if ($sourceNode && $targetNode) {
             const edgeParams = getEdgeParams($sourceNode, $targetNode);
+            
+            // Verifica se l'arco è bidirezionale
+            isBidirectional = $edges.some((e) => e.source === target && e.target === source);
+            
+            labelOffset = calculateLabelOffset(
+                edgeParams.sx,
+                edgeParams.sy,
+                edgeParams.tx,
+                edgeParams.ty,
+                isBidirectional
+            );
 
             // Verifica se è un self-loop
             const isSelfLoop = source === target;
@@ -165,6 +237,7 @@
         </marker>
     </defs>
     <path
+        bind:this={pathElement}
         class="svelte-flow__edge-path"
         {id}
         d={edgePath}
@@ -172,21 +245,15 @@
         style="stroke: azure;"
     />
     
-    <!-- Modifica la sezione della label -->
-    {#if edgePath && label}
+    {#if edgePath && label && pathElement}
         <text
-            dominant-baseline="central"
+            x={midPoint.x + labelOffset.dx}
+            y={midPoint.y + labelOffset.dy}
             text-anchor="middle"
-            style="fill: azure; font-size: 18px; pointer-events: none;"
+            dominant-baseline="auto"
+            class="font-mono fill-pink-400 font-bold text-2xl pointer-events-none"
         >
-            <!-- Calcola il punto medio del path -->
-            <textPath
-                href="#{id}"
-                startOffset="50%"
-                style="text-orientation: upright;"
-            >
-                <tspan dy="-10" style="fill: azure;">{label}</tspan>
-            </textPath>
+            <tspan>{label}</tspan>
         </text>
     {/if}
 </svg>
