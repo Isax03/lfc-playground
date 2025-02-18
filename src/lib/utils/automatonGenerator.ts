@@ -42,6 +42,7 @@ export function generateAutomatonLayout(automaton: StatesAutomaton): { nodes: No
                 target: toState,
                 label: symbol,
 				type: 'floating',
+                data: { shape: 'bezier' },
                 markerEnd: { type: MarkerType.Arrow },
             });
             g.setEdge(fromState, toState);

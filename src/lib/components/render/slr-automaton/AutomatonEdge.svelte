@@ -2,6 +2,8 @@
     import { getEdgeParams } from "$lib/utils/edgeUtils";
     import {
         getBezierPath,
+        getSmoothStepPath,
+        getStraightPath,
         useEdges,
         useInternalNode,
         type EdgeProps,
@@ -12,6 +14,8 @@
     export let source: $$Props["source"];
     export let target: $$Props["target"];
     export let id: $$Props["id"];
+    export let label: $$Props["label"] = undefined;
+    export let data: $$Props["data"] = undefined;
 
     $: sourceNode = useInternalNode(source);
     $: targetNode = useInternalNode(target);
@@ -113,14 +117,32 @@
                     edgeParams.ty
                 );
             } else {
-                edgePath = getBezierPath({
-                    sourceX: edgeParams.sx,
-                    sourceY: edgeParams.sy,
-                    sourcePosition: edgeParams.sourcePos,
-                    targetPosition: edgeParams.targetPos,
-                    targetX: edgeParams.tx,
-                    targetY: edgeParams.ty,
-                })[0];
+                if(data.shape === "bezier") {
+                    edgePath = getBezierPath({
+                        sourceX: edgeParams.sx,
+                        sourceY: edgeParams.sy,
+                        sourcePosition: edgeParams.sourcePos,
+                        targetPosition: edgeParams.targetPos,
+                        targetX: edgeParams.tx,
+                        targetY: edgeParams.ty,
+                    })[0];
+                } else if(data.shape === "smoothstep") {
+                    edgePath = getSmoothStepPath({
+                        sourceX: edgeParams.sx,
+                        sourceY: edgeParams.sy,
+                        sourcePosition: edgeParams.sourcePos,
+                        targetPosition: edgeParams.targetPos,
+                        targetX: edgeParams.tx,
+                        targetY: edgeParams.ty,
+                    })[0];
+                } else {
+                    edgePath = getStraightPath({
+                        sourceX: edgeParams.sx,
+                        sourceY: edgeParams.sy,
+                        targetX: edgeParams.tx,
+                        targetY: edgeParams.ty,
+                    })[0];
+                }
             }
         } else {
             edgePath = undefined;
@@ -149,6 +171,20 @@
         marker-end="url(#arrow-{id})"
         style="stroke: azure;"
     />
+    
+    <!-- Aggiungi questo elemento per la label -->
+    {#if edgePath && label}
+        <text>
+            <textPath
+                href="#{id}"
+                startOffset="50%"
+                style="fill: azure; font-size: 18px; dominant-baseline: text-after-edge;"
+                text-anchor="middle"
+            >
+                {label}
+            </textPath>
+        </text>
+    {/if}
 </svg>
 
 <style>
