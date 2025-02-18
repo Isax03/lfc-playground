@@ -6,6 +6,8 @@
         id: string;
         kernel: ProductionRule;
         closure: ProductionRule;
+        isAccept?: boolean;
+        isReduce?: boolean;
     }
 
     type $$Props = NodeProps & {
@@ -43,6 +45,22 @@
     >
         {id}
     </div>
+
+    <!-- Accept/Reduce badges -->
+    {#if data.isAccept}
+        <div
+            class="absolute -top-3 -right-2 bg-yellow-500/80 text-yellow-950 text-sm font-bold px-2 py-0.5 rounded-md shadow-sm"
+        >
+            ACC
+        </div>
+    {/if}
+    {#if data.isReduce}
+        <div
+            class="absolute -top-3 -right-2 bg-blue-400/80 text-blue-950 text-sm font-bold px-2 py-0.5 rounded-md shadow-sm"
+        >
+            RED
+        </div>
+    {/if}
 
     <!-- Kernel section -->
     <div class="mt-3 text-sm font-mono">

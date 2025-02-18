@@ -172,16 +172,20 @@
         style="stroke: azure;"
     />
     
-    <!-- Aggiungi questo elemento per la label -->
+    <!-- Modifica la sezione della label -->
     {#if edgePath && label}
-        <text>
+        <text
+            dominant-baseline="central"
+            text-anchor="middle"
+            style="fill: azure; font-size: 18px; pointer-events: none;"
+        >
+            <!-- Calcola il punto medio del path -->
             <textPath
                 href="#{id}"
                 startOffset="50%"
-                style="fill: azure; font-size: 18px; dominant-baseline: text-after-edge;"
-                text-anchor="middle"
+                style="text-orientation: upright;"
             >
-                {label}
+                <tspan dy="-10" style="fill: azure;">{label}</tspan>
             </textPath>
         </text>
     {/if}
