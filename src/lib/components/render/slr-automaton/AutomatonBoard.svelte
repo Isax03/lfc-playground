@@ -1,7 +1,7 @@
 <script lang="ts">
     import Label from "$lib/shadcn-ui/components/ui/label/label.svelte";
     import * as Select from "$lib/shadcn-ui/components/ui/select/index";
-    import type { StatesAutomaton } from "$lib/types/slr";
+    import type { ReducingLabel, StatesAutomaton } from "$lib/types/slr";
     import { generateAutomatonLayout } from "$lib/utils/automatonGenerator";
     import {
         Background,
@@ -19,11 +19,12 @@
 
     interface Props {
         automaton: StatesAutomaton;
+        reducingLabels: ReducingLabel[]; // aggiungiamo questa prop
     }
 
-    let { automaton }: Props = $props();
+    let { automaton, reducingLabels }: Props = $props();
 
-    const { nodes, edges } = generateAutomatonLayout(automaton);
+    const { nodes, edges } = generateAutomatonLayout(automaton, reducingLabels); // passiamo reducingLabels
 
     const nodesStore = writable(nodes);
     const edgesStore = writable(edges);

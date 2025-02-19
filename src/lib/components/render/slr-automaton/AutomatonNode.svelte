@@ -1,5 +1,7 @@
 <script lang="ts">
     import type { ProductionRule } from "$lib/types/grammar";
+    import type { ReducingLabel } from "$lib/types/slr";
+    import { isRuleEqual } from "$lib/utils/utils";
     import { Handle, Position, type NodeProps } from "@xyflow/svelte";
 
     interface NodeData {
@@ -8,6 +10,7 @@
         closure: ProductionRule;
         isAccept?: boolean;
         isReduce?: boolean;
+        reducingLabels?: ReducingLabel[];
     }
 
     type $$Props = NodeProps & {
@@ -22,6 +25,42 @@
     let closure: ProductionRule;
 
     ({ id, kernel, closure } = data);
+
+    function formatProduction(
+        nt: string,
+        prod: string[],
+        reducingLabels?: ReducingLabel[]
+    ): string {
+        // Per le produzioni nella closure, mostriamo sempre il marker
+        const formatted = `${nt} → ${prod.join("")}`;
+
+        if (prod.length === 1 && prod[0] === "·") {
+            const rule = {
+                head: nt,
+                body: ["ε"],
+            };
+            const label = reducingLabels?.find((rl) =>
+                isRuleEqual(rl.rule, rule)
+            )?.label;
+            if (label) {
+                // Per le closure items mostriamo il marker
+                return `${nt} → · (${label})`;
+            }
+            return `${nt} → ·`;
+        } else if (prod[prod.length - 1] === "·") {
+            const rule = {
+                head: nt,
+                body: prod.filter((s) => s !== "·"),
+            };
+            const label = reducingLabels?.find((rl) =>
+                isRuleEqual(rl.rule, rule)
+            )?.label;
+            if (label) {
+                return `${formatted} (${label})`;
+            }
+        }
+        return formatted;
+    }
 </script>
 
 <Handle
@@ -71,7 +110,7 @@
             {#each Array.from(kernel.entries()) as [nt, productions]}
                 {#each productions as prod}
                     <div class="text-foreground">
-                        {nt} → {prod.join("")}
+                        {formatProduction(nt, prod, data.reducingLabels)}
                     </div>
                 {/each}
             {/each}
@@ -91,7 +130,7 @@
             {#each Array.from(closure.entries()) as [nt, productions]}
                 {#each productions as prod}
                     <div class="text-foreground">
-                        {nt} → {prod.join("")}
+                        {formatProduction(nt, prod, data.reducingLabels)}
                     </div>
                 {/each}
             {/each}
