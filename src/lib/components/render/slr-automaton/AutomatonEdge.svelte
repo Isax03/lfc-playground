@@ -8,6 +8,7 @@
         useInternalNode,
         type EdgeProps,
     } from "@xyflow/svelte";
+    import { mode } from "mode-watcher";
 
     type $$Props = EdgeProps;
 
@@ -233,7 +234,7 @@
             markerHeight="8"
             orient="auto-start-reverse"
         >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill={$mode === "dark" ? "#fff" : "#000"} />
         </marker>
     </defs>
     <path
@@ -242,7 +243,7 @@
         {id}
         d={edgePath}
         marker-end="url(#arrow-{id})"
-        style="stroke: azure;"
+        style="stroke: {$mode === "dark" ? "#fff" : "#000"};"
     />
     
     {#if edgePath && label && pathElement}
