@@ -32,16 +32,32 @@ export function closure(grammar: Grammar, items: ProductionRule): Closure {
                 if (!nextProductions) continue;
 
                 const markedProductions = nextProductions.map(markProduction);
+                
+                // Get existing productions from both unmarked and body
+                const existingUnmarked = unmarked.get(nextSymbol) || [];
+                const existingBody = result.body.get(nextSymbol) || [];
+                const allExisting = [...existingUnmarked, ...existingBody];
 
-                if (
-                    !result.kernel.has(nextSymbol) &&
-                    !result.body.has(nextSymbol)
-                ) {
-                    result.body.set(nextSymbol, markedProductions);
-                    unmarked.set(nextSymbol, markedProductions);
-                } else if (!result.body.has(nextSymbol)) {
-                    result.body.set(nextSymbol, markedProductions);
-                    unmarked.set(nextSymbol, markedProductions);
+                // Filter out only truly new productions
+                const newProductions = markedProductions.filter(newProd => {
+                    return !allExisting.some(existingProd => 
+                        newProd.length === existingProd.length &&
+                        newProd.every((symbol, i) => symbol === existingProd[i])
+                    );
+                });
+
+                if (newProductions.length > 0) {
+                    // Add to body
+                    result.body.set(nextSymbol, [
+                        ...existingBody,
+                        ...newProductions
+                    ]);
+                    
+                    // Merge with existing unmarked productions
+                    unmarked.set(nextSymbol, [
+                        ...existingUnmarked,
+                        ...newProductions
+                    ]);
                 }
             }
         }

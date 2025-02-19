@@ -19,25 +19,30 @@
 
 <!-- Display First and Follow sets in a table -->
 {#if hasData}
-    <div class="w-full border rounded-md">
-        <Table.Root class="w-full">
-            <Table.Header>
-                <Table.Row>
-                    <Table.Head class="w-32">Non-terminal</Table.Head>
-                    <Table.Head>First</Table.Head>
-                    <Table.Head>Follow</Table.Head>
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {#each nonTerminals as nonTerminal}
-                    <Table.Row class="font-mono">
-                        <Table.Cell class="font-medium">{nonTerminal}</Table.Cell>
-                        <Table.Cell>{`${sortSetElements(firstSets.get(nonTerminal) ?? new Set()).join(', ')}`}</Table.Cell>
-                        <Table.Cell>{`${sortSetElements(followSets.get(nonTerminal) ?? new Set()).join(', ')}`}</Table.Cell>
+    <div class="flex flex-col w-full max-w-2xl">
+        <h5 class="mb-4 text-lg font-medium tracking-tight">
+            First/Follow Table
+        </h5>
+        <div class="w-full border rounded-md">
+            <Table.Root class="w-full">
+                <Table.Header>
+                    <Table.Row>
+                        <Table.Head class="w-32">Non-terminal</Table.Head>
+                        <Table.Head>First</Table.Head>
+                        <Table.Head>Follow</Table.Head>
                     </Table.Row>
-                {/each}
-            </Table.Body>
-        </Table.Root>
+                </Table.Header>
+                <Table.Body>
+                    {#each nonTerminals as nonTerminal}
+                        <Table.Row class="font-mono">
+                            <Table.Cell class="font-medium">{nonTerminal}</Table.Cell>
+                            <Table.Cell>{`${sortSetElements(firstSets.get(nonTerminal) ?? new Set()).join(', ')}`}</Table.Cell>
+                            <Table.Cell>{`${sortSetElements(followSets.get(nonTerminal) ?? new Set()).join(', ')}`}</Table.Cell>
+                        </Table.Row>
+                    {/each}
+                </Table.Body>
+            </Table.Root>
+        </div>
     </div>
 {/if}
 

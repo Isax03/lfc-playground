@@ -90,7 +90,7 @@ function findReducingItems(
 
     function processProductions(head: string, productions: Production[]) {
         for (const prod of productions) {
-            // Salta l'item di accept (S' -> S•)
+            // Salta SOLO l'item di accept (S' -> S•)
             if (
                 head === "S'" &&
                 prod.length === 2 &&
@@ -100,8 +100,8 @@ function findReducingItems(
                 continue;
             }
 
+            // Processa normalmente tutti gli altri items
             if (prod.length === 1 && prod[0] === "·") {
-                // Caso epsilon
                 reducingItems.push({ head, body: ["ε"] });
             } else if (prod[prod.length - 1] === "·") {
                 const body = prod.filter((s) => s !== "·");
@@ -110,12 +110,10 @@ function findReducingItems(
         }
     }
 
-    // Check kernel items
+    // Process both kernel and body items
     for (const [head, productions] of closure.kernel.entries()) {
         processProductions(head, productions);
     }
-
-    // Check body items
     for (const [head, productions] of closure.body.entries()) {
         processProductions(head, productions);
     }
@@ -197,6 +195,8 @@ export function buildSlrAutomaton(grammar: Grammar): AutomatonBuildResult {
             }
         }
 
+        console.log("State", stateId, "Symbols", symbols);
+
         for (const symbol of symbols) {
             const targetKernel = computeKernel(state, symbol);
 
@@ -207,7 +207,13 @@ export function buildSlrAutomaton(grammar: Grammar): AutomatonBuildResult {
             if (!targetStateId) {
                 targetStateId = stateCounter.toString();
                 stateCounter++;
+
+                console.log("New state", targetStateId, targetKernel);
+                
                 const targetClosure = closure(grammar, targetKernel);
+
+                console.log("New closure", targetClosure);
+
                 automaton.states[targetStateId] = targetClosure;
                 unmarked.add(targetStateId);
 

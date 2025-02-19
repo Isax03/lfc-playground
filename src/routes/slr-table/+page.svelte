@@ -7,18 +7,21 @@
     import FirstFollowTable from "$lib/components/tools/tables/FirstFollowTable.svelte";
     import Checkbox from "$lib/shadcn-ui/components/ui/checkbox/checkbox.svelte";
     import { Label } from "$lib/shadcn-ui/components/ui/label";
+    import SLRTable from "$lib/components/tools/tables/SLRTable.svelte";
     import type { FirstSets, FollowSets } from "$lib/types/first-follow";
     import type { Grammar } from "$lib/types/grammar";
     import type {
         AutomatonStep,
         ReducingLabel,
         StatesAutomaton,
+        SLRTable as SLRTableType,
     } from "$lib/types/slr";
     import { computeFirstSets } from "$lib/utils/first-follow/first";
     import { computeFollow } from "$lib/utils/first-follow/follow";
     import { parseGrammar } from "$lib/utils/grammar/parse";
     import { decodeGrammar } from "$lib/utils/sharing";
     import { buildSlrAutomaton } from "$lib/utils/slr/states";
+    import { computeSlrTable } from "$lib/utils/slr/table";
     import { onMount } from "svelte";
 
     let grammarInput = $state("");
@@ -46,11 +49,17 @@
     let isParsed = $state(false);
     let showParseTree = $state(false);
 
+    let slrResult = $state<{
+        table: SLRTableType;
+        hasConflicts: boolean;
+    } | null>(null);
+
     /**
      * Parses the grammar input and computes First sets, Follow sets and LL(1) table
      */
     async function parseAndCompute() {
         automaton = null;
+        slrResult = null;
         // wait 3 seconds
         await new Promise((resolve) => setTimeout(resolve, 100));
         showParseTree = false;
@@ -58,6 +67,16 @@
         firstSets = computeFirstSets(grammar);
         followSets = computeFollow(grammar, firstSets);
         ({ automaton, steps, reducingLabels } = buildSlrAutomaton(grammar));
+
+        // Compute SLR table
+        if (automaton) {
+            slrResult = computeSlrTable(
+                automaton,
+                reducingLabels,
+                grammar,
+                followSets
+            );
+        }
     }
 
     /**
@@ -170,23 +189,34 @@ B -> d`;
         output={OutputSection}
     />
 
-    {#if automaton !== null}
-        {#if showAutomaton && showSteps}
-            <div
-                class="h-[600px] w-full flex items-center justify-center border rounded-lg"
-            >
-                <AutomatonBoard {automaton} {reducingLabels} />
-            </div>
-        {/if}
+    <div class="flex flex-col gap-8 w-full max-w-screen-xl mx-auto px-4">
+        {#if automaton !== null}
+            {#if showAutomaton && showSteps}
+                <div
+                    class="h-[600px] w-full flex items-center justify-center border rounded-lg"
+                >
+                    <AutomatonBoard {automaton} {reducingLabels} />
+                </div>
+            {/if}
 
-        {#if showFirstFollow && showTable}
-            <div class="w-full flex gap-10">
-                <FirstFollowTable {firstSets} {followSets} />
-                <!-- <SlrTable  /> -->
-                <span class="text-3xl">SLR Table: Work In Progress</span>
-            </div>
+            {#if showFirstFollow || (showTable && slrResult)}
+                <div class="w-full flex gap-10">
+                    {#if showFirstFollow}
+                        <FirstFollowTable {firstSets} {followSets} />
+                    {/if}
+
+                    {#if showTable && slrResult}
+                        <SLRTable
+                            table={slrResult.table}
+                            {grammar}
+                            hasConflicts={slrResult.hasConflicts}
+                            {reducingLabels}
+                        />
+                    {/if}
+                </div>
+            {/if}
         {/if}
-    {/if}
+    </div>
 
     <!-- {#if firstSets.size > 0 /* && !ll1Result.notLL1 */}
         <div class="p-4 border rounded-lg mx-4 md:mx-32">

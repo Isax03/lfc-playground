@@ -7,7 +7,9 @@ export type SLRMove =
     | "accept"
     | "error"
     | { action: "shift"; state: number }
-    | { action: "reduce"; rule: ProductionRule };
+    | { action: "reduce"; rule: ProductionRule }
+    | { action: "conflict"; moves: SLRMove[] }
+    | number; // for goto
 
 /**
  * Represents an SLR parsing table where each cell contains
