@@ -17,6 +17,7 @@
     import { computeLL1Table } from "$lib/utils/ll1/table";
     import { decodeGrammar } from "$lib/utils/sharing";
     import { onMount } from "svelte";
+    import Checkbox from "$lib/shadcn-ui/components/ui/checkbox/checkbox.svelte";
 
     let grammarInput = $state("");
 
@@ -33,6 +34,7 @@
     let inputString = $state("");
     let parseResult = $state<ParseResult>({ tree: null, trace: [], success: false });
     let isParsed = $state(false);
+    let showParseTrace = $state(true);
 
     /**
      * Parses the grammar input and computes First sets, Follow sets and LL(1) table
@@ -128,23 +130,31 @@ F -> id | ( E )`;
 
     {#if firstSets.size > 0 && !ll1Result.notLL1}
         <div class="p-4 border rounded-lg mx-4 md:mx-32">
-            <div class="max-w-full md:max-w-lg">
+            <div class="max-w-full md:max-w-lg flex items-center gap-4">
                 <ParseInput
                     bind:inputString
                     onParse={handleParse}
                     onClear={handleClear}
                     {isParsed}
                 />
+                <div class="flex items-center space-x-2">
+                    <Checkbox id="trace" bind:checked={showParseTrace} />
+                    <label for="trace" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        Show trace
+                    </label>
+                </div>
             </div>
 
             {#if showParseTree}
-                <div class="mt-4 flex flex-col lg:grid lg:grid-cols-2 gap-4">
+                <div class="mt-4 flex flex-col lg:grid gap-4" class:lg:grid-cols-2={showParseTrace}>
                     <div class="h-[400px] md:h-[600px] flex items-center justify-center border rounded-lg">
                         <ParseTreeBoard parseTree={parseResult.tree} />
                     </div>
-                    <div class="h-[400px] md:h-[600px]">
-                        <ParseTraceTable trace={parseResult.trace} />
-                    </div>
+                    {#if showParseTrace}
+                        <div class="h-[400px] md:h-[600px]">
+                            <ParseTraceTable trace={parseResult.trace} />
+                        </div>
+                    {/if}
                 </div>
             {/if}
         </div>

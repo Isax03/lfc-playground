@@ -52,7 +52,7 @@
     </p>
 
     <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-screen-xl w-full px-4"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-(--breakpoint-xl) w-full px-4"
     >
         {#each tools as tool}
             <a

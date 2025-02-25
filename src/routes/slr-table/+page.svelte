@@ -189,7 +189,7 @@ B -> d`;
         output={OutputSection}
     />
 
-    <div class="flex flex-col gap-8 w-full max-w-screen-xl mx-auto px-4">
+    <div class="flex flex-col gap-8 w-full max-w-(--breakpoint-xl) mx-auto px-4">
         {#if automaton !== null}
             {#if showAutomaton && showSteps}
                 <div

@@ -46,7 +46,7 @@
             grammarInput = decodeGrammar(grammarParam) || grammarInput;
             parseAndTransform();
         } else {
-            grammarInput = "S -> S a | b";
+            grammarInput = "S -> a S | a";
         }
     });
 </script>

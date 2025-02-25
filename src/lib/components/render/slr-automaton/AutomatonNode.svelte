@@ -77,10 +77,10 @@
     style="opacity: 0"
     {isConnectable}
 />
-<div class="p-4 border rounded-md bg-card shadow-sm min-w-[200px] relative">
+<div class="p-4 border rounded-md bg-card shadow-xs min-w-[200px] relative">
     <!-- State ID badge -->
     <div
-        class="absolute -top-3 -left-2 bg-primary text-primary-foreground text-sm font-bold px-2 py-0.5 rounded-md shadow-sm"
+        class="absolute -top-3 -left-2 bg-primary text-primary-foreground text-sm font-bold px-2 py-0.5 rounded-md shadow-xs"
     >
         {id}
     </div>
@@ -88,14 +88,14 @@
     <!-- Accept/Reduce badges -->
     {#if data.isAccept}
         <div
-            class="absolute -top-3 -right-2 bg-yellow-500/80 text-yellow-950 text-sm font-bold px-2 py-0.5 rounded-md shadow-sm"
+            class="absolute -top-3 -right-2 bg-yellow-500/80 text-yellow-950 text-sm font-bold px-2 py-0.5 rounded-md shadow-xs"
         >
             ACC
         </div>
     {/if}
     {#if data.isReduce}
         <div
-            class="absolute -top-3 -right-2 bg-blue-400/80 text-blue-950 text-sm font-bold px-2 py-0.5 rounded-md shadow-sm"
+            class="absolute -top-3 -right-2 bg-blue-400/80 text-blue-950 text-sm font-bold px-2 py-0.5 rounded-md shadow-xs"
         >
             RED
         </div>

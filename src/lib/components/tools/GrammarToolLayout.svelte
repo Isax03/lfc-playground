@@ -14,7 +14,7 @@
 </script>
 
 <!-- Layout template for grammar tools -->
-<div class="flex flex-col gap-8 w-full max-w-screen-xl mx-auto px-4">
+<div class="flex flex-col gap-8 w-full max-w-(--breakpoint-xl) mx-auto px-4">
     <div>
         <h1 class="text-3xl font-bold tracking-tight">{title}</h1>
         <p class="text-muted-foreground mt-2">

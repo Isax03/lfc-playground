@@ -28,7 +28,7 @@
 </script>
 
 <nav
-    class="sticky top-0 z-[99] w-full h-max py-4 flex items-center justify-between bg-background border-b border-border"
+    class="sticky top-0 z-99 w-full h-max py-4 flex items-center justify-between bg-background border-b border-border"
 >
     <div class="w-full flex items-center justify-between mx-auto h-max px-4">
         <a href="/" class="flex items-center w-40">
@@ -74,7 +74,7 @@
                     >
                         <Menu />
                     </Sheet.Trigger>
-                    <Sheet.Content side="right" class="w-72 z-[100]">
+                    <Sheet.Content side="right" class="w-72 z-100">
                         <Sheet.Header>
                             <Sheet.Title>Menu</Sheet.Title>
                         </Sheet.Header>
