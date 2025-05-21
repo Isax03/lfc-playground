@@ -60,7 +60,7 @@
                 class="block p-6 border rounded-lg hover:bg-muted transition-colors duration-200"
             >
                 <h2 class="text-xl font-semibold mb-2">{tool.title}</h2>
-                <p class="text-muted-foreground mb-4">{tool.description}</p>
+                <p class="text-muted-foreground mb-4">{@html tool.description}</p>
                 <div class="flex items-center justify-end text-sm">
                     Try it <ArrowRight class="w-4 h-4 ml-2" />
                 </div>
