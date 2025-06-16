@@ -3,8 +3,7 @@
 
     type $$Props = NodeProps;
 
-    export let data: $$Props["data"];
-    export let isConnectable: $$Props["isConnectable"];
+    let { data, isConnectable }: $$Props = $props();
 </script>
 
 <Handle

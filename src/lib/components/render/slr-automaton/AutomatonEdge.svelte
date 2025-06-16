@@ -12,17 +12,19 @@
 
     type $$Props = EdgeProps;
 
-    export let source: $$Props["source"];
-    export let target: $$Props["target"];
-    export let id: $$Props["id"];
-    export let label: $$Props["label"] = undefined;
-    export let data: $$Props["data"] = undefined;
+    let { source, target, id, label = undefined, data = undefined } = $props();
 
-    $: sourceNode = useInternalNode(source);
-    $: targetNode = useInternalNode(target);
+    // export let source: $$Props["source"];
+    // export let target: $$Props["target"];
+    // export let id: $$Props["id"];
+    // export let label: $$Props["label"] = undefined;
+    // export let data: $$Props["data"] = undefined;
+
+    const sourceNode = $derived(useInternalNode(source));
+    const targetNode = $derived(useInternalNode(target));
     const edges = useEdges();
 
-    let edgePath: string | undefined;
+    let edgePath: string | undefined = $state(undefined);
 
     function getBidirectionalPath(
         sourceX: number,
@@ -111,58 +113,65 @@
         const dy = targetY - sourceY;
         const angle = Math.atan2(dy, dx);
         const degrees = angle * (180 / Math.PI);
-        
+
         // Aumentato l'offset di base per le label
         const baseOffset = isBidirectional ? 40 : 25; // aumentato per gli archi bidirezionali
-        
+
         if (isBidirectional) {
             const shouldBeAbove = parseInt(source) < parseInt(target);
-            
+
             if (Math.abs(degrees) > 45 && Math.abs(degrees) < 135) {
                 // Per archi verticali, sposta le label ancora più lateralmente
                 return {
                     dx: shouldBeAbove ? baseOffset : -baseOffset,
-                    dy: 0
+                    dy: 0,
                 };
             } else {
                 // Per archi orizzontali, sposta le label più in alto/basso
                 return {
                     dx: 0,
-                    dy: shouldBeAbove ? -baseOffset : baseOffset
+                    dy: shouldBeAbove ? -baseOffset : baseOffset,
                 };
             }
         }
-        
+
         // Per archi non bidirezionali, mantieni il comportamento precedente
         if (Math.abs(degrees) > 45 && Math.abs(degrees) < 135) {
             return {
                 dx: baseOffset,
-                dy: 0
+                dy: 0,
             };
         }
-        
+
         return {
             dx: 0,
-            dy: -baseOffset
+            dy: -baseOffset,
         };
     }
 
-    let pathElement: SVGPathElement;
-    let midPoint = { x: 0, y: 0 };
-    let labelOffset = { dx: 0, dy: -10 };
+    let pathElement: SVGPathElement | undefined = $state(undefined);
+    let midPoint = $state({ x: 0, y: 0 });
+    let labelOffset = $state({ dx: 0, dy: -10 });
     let isBidirectional: boolean;
 
-    $: if (pathElement && edgePath) {
-        midPoint = getPathMidpoint(pathElement);
-    }
+    $effect(() => {
+        if (pathElement && edgePath) {
+            midPoint = getPathMidpoint(pathElement);
+        }
+    });
 
-    $: {
-        if ($sourceNode && $targetNode) {
-            const edgeParams = getEdgeParams($sourceNode, $targetNode);
-            
+    $effect(() => {
+        if (sourceNode && targetNode) {
+            const edgeParams = getEdgeParams(
+                sourceNode.current!,
+                targetNode.current!
+            );
+
             // Verifica se l'arco è bidirezionale
-            isBidirectional = $edges.some((e) => e.source === target && e.target === source);
-            
+            isBidirectional = edges.current.some(
+                (e) => e.source === target && e.target === source
+            );
+
             labelOffset = calculateLabelOffset(
                 edgeParams.sx,
                 edgeParams.sy,
@@ -181,7 +190,9 @@
                     edgeParams.sourcePos
                 );
             } else if (
-                $edges.some((e) => e.source === target && e.target === source)
+                edges.current.some(
+                    (e) => e.source === target && e.target === source
+                )
             ) {
                 edgePath = getBidirectionalPath(
                     edgeParams.sx,
@@ -190,7 +201,7 @@
                     edgeParams.ty
                 );
             } else {
-                if(data.shape === "bezier") {
+                if (data.shape === "bezier") {
                     edgePath = getBezierPath({
                         sourceX: edgeParams.sx,
                         sourceY: edgeParams.sy,
@@ -199,7 +210,7 @@
                         targetX: edgeParams.tx,
                         targetY: edgeParams.ty,
                     })[0];
-                } else if(data.shape === "smoothstep") {
+                } else if (data.shape === "smoothstep") {
                     edgePath = getSmoothStepPath({
                         sourceX: edgeParams.sx,
                         sourceY: edgeParams.sy,
@@ -220,7 +231,7 @@
         } else {
             edgePath = undefined;
         }
-    }
+    });
 </script>
 
 <svg class="svelte-flow__edge">
@@ -234,7 +245,10 @@
             markerHeight="8"
             orient="auto-start-reverse"
         >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill={$mode === "dark" ? "#fff" : "#000"} />
+            <path
+                d="M 0 0 L 10 5 L 0 10 z"
+                fill={mode.current === "dark" ? "#fff" : "#000"}
+            />
         </marker>
     </defs>
     <path
@@ -243,9 +257,9 @@
         {id}
         d={edgePath}
         marker-end="url(#arrow-{id})"
-        style="stroke: {$mode === "dark" ? "#fff" : "#000"};"
+        style="stroke: {mode.current === 'dark' ? '#fff' : '#000'};"
     />
-    
+
     {#if edgePath && label && pathElement}
         <text
             x={midPoint.x + labelOffset.dx}

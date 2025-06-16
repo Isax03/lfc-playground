@@ -17,14 +17,11 @@
         data: NodeData;
     };
 
-    export let data: NodeData;
-    export let isConnectable: $$Props["isConnectable"];
+    let { data, isConnectable }: $$Props = $props();
 
-    let id: string;
-    let kernel: ProductionRule;
-    let closure: ProductionRule;
-
-    ({ id, kernel, closure } = data);
+    let id: string = data.id;
+    let kernel: ProductionRule = data.kernel;
+    let closure: ProductionRule = data.closure;
 
     function formatProduction(
         nt: string,
