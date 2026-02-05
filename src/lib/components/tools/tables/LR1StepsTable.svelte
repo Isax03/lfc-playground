@@ -40,9 +40,6 @@
         return formatted;
     }
 
-    function formatItems(items: LR1Item[]): string {
-        return items.map(item => formatLR1Item(item)).join("<br />");
-    }
 </script>
 
 {#if steps.length > 0}
@@ -75,13 +72,15 @@
                                         {/if}
                                     </Table.Cell>
                                     <Table.Cell>
-                                        {@html formatItems(
-                                            step.kernel ?? step.closure?.kernel ?? []
-                                        )}
+                                        {#each step.kernel ?? step.closure?.kernel ?? [] as item, i}
+                                            {formatLR1Item(item)}{#if i < (step.kernel ?? step.closure?.kernel ?? []).length - 1}<br />{/if}
+                                        {/each}
                                     </Table.Cell>
                                     <Table.Cell>
                                         {#if !step.isExistingState && step.closure}
-                                            {@html formatItems(step.closure.body)}
+                                            {#each step.closure.body as item, i}
+                                                {formatLR1Item(item)}{#if i < step.closure.body.length - 1}<br />{/if}
+                                            {/each}
                                         {/if}
                                     </Table.Cell>
                                     <Table.Cell>
