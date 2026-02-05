@@ -2,13 +2,13 @@ import type { FirstSet, FirstSets } from "$lib/types/first-follow";
 import type { Grammar } from "$lib/types/grammar";
 
 export function computeFirstForSymbol(
-    symbol: string, 
-    grammar: Grammar, 
+    symbol: string,
+    grammar: Grammar,
     firstSets: FirstSets,
     processing: Set<string> = new Set()
 ): FirstSet {
-    // Se il simbolo è un terminale o epsilon, il first è il simbolo stesso
-    if (grammar.T.has(symbol) || symbol === 'ε') {
+    // Se il simbolo è un terminale, epsilon, o $ (end marker), il first è il simbolo stesso
+    if (grammar.T.has(symbol) || symbol === 'ε' || symbol === '$') {
         return new Set([symbol]);
     }
 
