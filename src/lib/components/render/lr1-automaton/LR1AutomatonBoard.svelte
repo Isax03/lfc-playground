@@ -57,7 +57,6 @@
         edges.forEach((edge) => {
             edge.data!!.shape = value;
         });
-        console.log(value);
         show = false;
         setTimeout(() => {
             show = true;
