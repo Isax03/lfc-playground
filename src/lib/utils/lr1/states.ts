@@ -62,33 +62,6 @@ function computeKernel(state: LR1Closure, symbol: string): LR1Item[] {
 }
 
 /**
- * Checks if two LR(1) states are equal (same items with same lookaheads)
- * This is the key difference from SLR - we compare full items including lookahead
- */
-function statesEqual(state1: LR1Closure, state2: LR1Closure): boolean {
-    // Compare kernels - they uniquely identify states
-    if (state1.kernel.length !== state2.kernel.length) return false;
-
-    for (const item1 of state1.kernel) {
-        const matching = state2.kernel.find(item2 =>
-            item1.head === item2.head &&
-            item1.body.length === item2.body.length &&
-            item1.body.every((s, i) => s === item2.body[i])
-        );
-
-        if (!matching) return false;
-
-        // Also compare lookahead sets
-        if (item1.lookahead.size !== matching.lookahead.size) return false;
-        for (const la of item1.lookahead) {
-            if (!matching.lookahead.has(la)) return false;
-        }
-    }
-
-    return true;
-}
-
-/**
  * Checks if two kernels are equal (for finding existing states)
  */
 function kernelsEqual(k1: LR1Item[], k2: LR1Item[]): boolean {
