@@ -25,7 +25,7 @@
     let { parseTree }: Props = $props();
 
     // Generate layout and convert to flow nodes
-    const layoutTree = generateTreeLayout(parseTree, 80, 80);
+    const layoutTree = $derived(generateTreeLayout(parseTree, 80, 80));
     const { nodes, edges } = $derived(convertToFlowNodes(layoutTree));    const nodeTypes: NodeTypes = {
         simple: TreeNode,
     };

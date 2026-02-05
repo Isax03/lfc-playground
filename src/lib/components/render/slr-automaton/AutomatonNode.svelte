@@ -19,9 +19,9 @@
 
     let { data, isConnectable }: $$Props = $props();
 
-    let id: string = data.id;
-    let kernel: ProductionRule = data.kernel;
-    let closure: ProductionRule = data.closure;
+    const id = $derived(data.id);
+    const kernel = $derived(data.kernel);
+    const closure = $derived(data.closure);
 
     function formatProduction(
         nt: string,

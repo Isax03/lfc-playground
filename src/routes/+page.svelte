@@ -33,8 +33,20 @@
         {
             title: "SLR Parsing Table",
             description:
-                "Generate SLR Automaton (table to be implemented) with steps",
+                "Generate SLR Automaton and parsing table with steps",
             href: "/slr-table",
+        },
+        {
+            title: "LR(1) Parsing Table",
+            description:
+                "Generate LR(1) automaton and parsing table with shift/reduce parsing",
+            href: "/lr1-table",
+        },
+        {
+            title: "LALR Parsing Table",
+            description:
+                "Generate LALR(1) automaton (merged LR(1) states) and parsing table",
+            href: "/lalr-table",
         },
     ];
 </script>
