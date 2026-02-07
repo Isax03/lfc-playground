@@ -14,12 +14,6 @@
 
     let { source, target, id, label = undefined, data = undefined } = $props();
 
-    // export let source: $$Props["source"];
-    // export let target: $$Props["target"];
-    // export let id: $$Props["id"];
-    // export let label: $$Props["label"] = undefined;
-    // export let data: $$Props["data"] = undefined;
-
     const sourceNode = $derived(useInternalNode(source));
     const targetNode = $derived(useInternalNode(target));
     const edges = useEdges();
