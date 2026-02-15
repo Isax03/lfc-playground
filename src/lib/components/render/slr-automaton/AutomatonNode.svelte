@@ -74,7 +74,7 @@
     style="opacity: 0"
     {isConnectable}
 />
-<div class="p-4 border rounded-md bg-card shadow-xs min-w-[200px] relative">
+<div class="p-4 border rounded-md bg-card shadow-xs min-w-50 relative">
     <!-- State ID badge -->
     <div
         class="absolute -top-3 -left-2 bg-primary text-primary-foreground text-sm font-bold px-2 py-0.5 rounded-md shadow-xs"

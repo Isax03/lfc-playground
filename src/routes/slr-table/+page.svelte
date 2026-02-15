@@ -171,7 +171,7 @@ B -> d`;
         {/if}
         {#if showAutomaton && automaton !== null && !showSteps}
             <div
-                class="h-[600px] w-full flex items-center justify-center border rounded-lg"
+                class="h-150 w-full flex items-center justify-center border rounded-lg"
             >
                 <AutomatonBoard {automaton} {reducingLabels} />
             </div>
@@ -193,7 +193,7 @@ B -> d`;
         {#if automaton !== null}
             {#if showAutomaton && showSteps}
                 <div
-                    class="h-[600px] w-full flex items-center justify-center border rounded-lg"
+                    class="h-150 w-full flex items-center justify-center border rounded-lg"
                 >
                     <AutomatonBoard {automaton} {reducingLabels} />
                 </div>

@@ -4,7 +4,7 @@
         buttonVariants,
     } from "$lib/shadcn-ui/components/ui/button/button.svelte";
     import * as Sheet from "$lib/shadcn-ui/components/ui/sheet";
-    import { Menu } from "lucide-svelte";
+    import { Menu, ChevronDown } from "lucide-svelte";
     import DarkMode from "./DarkMode.svelte";
     import Logo from "./Logo.svelte";
 
@@ -19,6 +19,15 @@
         { href: "/lalr-table", label: "LALR Table" },
     ];
 
+    const automataItems = [
+        { href: "/automata/nfa", label: "Regex → NFA" },
+        { href: "/automata/dfa", label: "Regex → DFA" },
+        { href: "/automata/nfa-to-dfa", label: "NFA → DFA" },
+        { href: "/automata/min-dfa", label: "Regex → Min-DFA" },
+        { href: "/automata/dfa-to-min-dfa", label: "DFA → Min-DFA" },
+        { href: "/automata/nfa-to-min-dfa", label: "NFA → Min-DFA" },
+    ];
+
     const currentPath = $derived(page.url.pathname);
 
     function isActive(href: string) {
@@ -27,6 +36,8 @@
         }
         return currentPath.startsWith(href);
     }
+
+    let automataOpen = $state(false);
 </script>
 
 <nav
@@ -37,13 +48,13 @@
             <Logo />
         </a>
 
-        <div class="items-center justify-between hidden md:flex md:w-auto">
-            <ul class="flex flex-row space-x-8">
+        <div class="items-center justify-between hidden lg:flex lg:w-auto">
+            <ul class="flex flex-row space-x-6">
                 {#each navItems as item}
                     <li>
                         <a
                             href={item.href}
-                            class="block py-2 transition-colors {isActive(
+                            class="block py-2 transition-colors text-sm {isActive(
                                 item.href
                             )
                                 ? 'text-primary font-medium'
@@ -53,6 +64,39 @@
                         </a>
                     </li>
                 {/each}
+                <li class="relative">
+                    <button
+                        class="flex items-center gap-1 py-2 transition-colors text-sm {isActive('/automata')
+                            ? 'text-primary font-medium'
+                            : 'text-muted-foreground hover:text-primary'}"
+                        onmouseenter={() => automataOpen = true}
+                        onmouseleave={() => automataOpen = false}
+                        onfocus={() => automataOpen = true}
+                    >
+                        Automata
+                        <ChevronDown class="w-3 h-3" />
+                    </button>
+                    {#if automataOpen}
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div
+                            class="absolute top-full left-0 mt-1 w-48 bg-background border rounded-md shadow-lg py-1 z-50"
+                            onmouseenter={() => automataOpen = true}
+                            onmouseleave={() => automataOpen = false}
+                        >
+                            {#each automataItems as item}
+                                <a
+                                    href={item.href}
+                                    class="block px-4 py-2 text-sm transition-colors {isActive(item.href)
+                                        ? 'text-primary font-medium bg-muted'
+                                        : 'text-muted-foreground hover:text-primary hover:bg-muted'}"
+                                    onclick={() => automataOpen = false}
+                                >
+                                    {item.label}
+                                </a>
+                            {/each}
+                        </div>
+                    {/if}
+                </li>
             </ul>
         </div>
 
@@ -74,7 +118,7 @@
                 >
             </Button>
             <DarkMode />
-            <div class="block md:hidden">
+            <div class="block lg:hidden">
                 <Sheet.Root>
                     <Sheet.Trigger
                         class={buttonVariants({
@@ -105,6 +149,26 @@
                                     </a>
                                 </Sheet.Close>
                             {/each}
+
+                            <div class="w-full border-t pt-2 mt-1">
+                                <p class="text-xs font-semibold text-muted-foreground px-4 mb-2">Automata (Regex)</p>
+                                {#each automataItems as item}
+                                    <Sheet.Close
+                                        class={buttonVariants({ variant: "link" })}
+                                    >
+                                        <a
+                                            href={item.href}
+                                            class="block py-2 transition-colors {isActive(
+                                                item.href
+                                            )
+                                                ? 'text-primary font-medium'
+                                                : 'text-muted-foreground hover:text-primary'}"
+                                        >
+                                            {item.label}
+                                        </a>
+                                    </Sheet.Close>
+                                {/each}
+                            </div>
                         </div>
                     </Sheet.Content>
                 </Sheet.Root>

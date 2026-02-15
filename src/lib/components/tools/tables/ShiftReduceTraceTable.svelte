@@ -15,7 +15,7 @@
             Shift/Reduce Parsing Trace
         </h5>
         <div class="w-full border rounded-md">
-            <div class="overflow-x-auto max-h-[32rem] overflow-y-scroll">
+            <div class="overflow-x-auto max-h-128 overflow-y-scroll">
                 <div class="min-w-max">
                     <Table.Root>
                         <Table.Header>

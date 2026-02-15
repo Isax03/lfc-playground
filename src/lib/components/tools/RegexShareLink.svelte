@@ -3,25 +3,27 @@
         buttonVariants,
     } from "$lib/shadcn-ui/components/ui/button/button.svelte";
     import * as Dialog from "$lib/shadcn-ui/components/ui/dialog";
-    import { createShareableLink } from "$lib/utils/sharing";
     import { Share2, Check, X } from "lucide-svelte";
     import { Input } from "$lib/shadcn-ui/components/ui/input";
-    import { Textarea } from "$lib/shadcn-ui/components/ui/textarea";
     import { page } from "$app/state";
     import Label from "$lib/shadcn-ui/components/ui/label/label.svelte";
-    import { Root } from "$lib/shadcn-ui/components/ui/button";
 
     interface Props {
-        grammar: string;
+        regex: string;
     }
 
-    let { grammar = $bindable() }: Props = $props();
+    let { regex = $bindable() }: Props = $props();
     let path = page.url.pathname;
 
     let copied = $state(false);
-    let shareUrl = $derived(createShareableLink(path, grammar));
 
-    // Show feedback for 2 seconds after copying
+    function createShareableLink(): string {
+        const encoded = btoa(encodeURIComponent(regex));
+        return `${window.location.origin}${path}?regex=${encoded}`;
+    }
+
+    let shareUrl = $derived(createShareableLink());
+
     async function copyToClipboard() {
         await navigator.clipboard.writeText(shareUrl);
         copied = true;
@@ -36,15 +38,15 @@
     </Dialog.Trigger>
     <Dialog.Content class="sm:max-w-125">
         <Dialog.Header>
-            <Dialog.Title>Share Grammar</Dialog.Title>
+            <Dialog.Title>Share Regex</Dialog.Title>
             <Dialog.Description>
-                Review your grammar and copy the shareable link
+                Review your regex and copy the shareable link
             </Dialog.Description>
         </Dialog.Header>
         <div class="grid gap-4 py-4">
             <div class="grid gap-2">
-                <Label for="preview">Grammar Preview</Label>
-                <Textarea readonly value={grammar} class="font-mono" id="preview" />
+                <Label for="preview">Regex</Label>
+                <Input readonly value={regex} class="font-mono" id="preview" />
             </div>
             <div class="grid gap-2">
                 <Label for="share">Shareable Link</Label>

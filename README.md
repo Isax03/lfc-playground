@@ -16,7 +16,4 @@ Ogni tipo di contributo è ben accetto, se avete suggerimenti, correzioni o nuov
 - [x] Costuzione della tabella di parsing SLR(1) per una grammatica
 - [x] Costuzione dell'automa caratteristico SLR(1) per una grammatica
 - [x] Parsing di una stringa con algoritmo shift/reduce SLR(1) e visualizzazione dell'albero di parsing
-- [ ] Costuzione di automi a stati finiti (NFA, DFA, Min-DFA) da una regex
-
-#### TODO:
-- Fix visualizzazione albero di parsing
+- [x] Costuzione di automi a stati finiti (NFA, DFA, Min-DFA) da una regex

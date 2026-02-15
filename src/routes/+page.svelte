@@ -2,7 +2,7 @@
     import { ArrowRight } from "lucide-svelte";
 
     // Tool definitions for the homepage grid
-    const tools = [
+    const grammarTools = [
         {
             title: "First & Follow Sets",
             description:
@@ -49,6 +49,45 @@
             href: "/lalr-table",
         },
     ];
+
+    const automataTools = [
+        {
+            title: "Regex → NFA",
+            description:
+                "Build an NFA from a regex using Thompson's construction with step-by-step details",
+            href: "/automata/nfa",
+        },
+        {
+            title: "Regex → DFA",
+            description:
+                "Convert a regex directly to a DFA (Thompson + Subset Construction)",
+            href: "/automata/dfa",
+        },
+        {
+            title: "NFA → DFA",
+            description:
+                "Convert NFA to DFA via subset construction with step-by-step details",
+            href: "/automata/nfa-to-dfa",
+        },
+        {
+            title: "Regex → Min-DFA",
+            description:
+                "Convert a regex directly to its minimized DFA",
+            href: "/automata/min-dfa",
+        },
+        {
+            title: "DFA → Min-DFA",
+            description:
+                "Minimize a DFA using partition refinement with step-by-step details",
+            href: "/automata/dfa-to-min-dfa",
+        },
+        {
+            title: "NFA → Min-DFA",
+            description:
+                "Full pipeline: NFA → DFA → Min-DFA with all intermediate steps",
+            href: "/automata/nfa-to-min-dfa",
+        },
+    ];
 </script>
 
 <svelte:head>
@@ -59,24 +98,45 @@
     class="flex flex-col items-center justify-center w-full h-full gap-8 text-center"
 >
     <h1 class="text-4xl font-bold">Welcome to LFC Playground</h1>
-    <p class="text-xl text-muted-foreground max-w-[600px]">
+    <p class="text-xl text-muted-foreground max-w-150">
         A collection of tools for Formal Languages and Compilators course
     </p>
 
-    <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-(--breakpoint-xl) w-full px-4"
-    >
-        {#each tools as tool}
-            <a
-                href={tool.href}
-                class="block p-6 border rounded-lg hover:bg-muted transition-colors duration-200"
-            >
-                <h2 class="text-xl font-semibold mb-2">{tool.title}</h2>
-                <p class="text-muted-foreground mb-4">{@html tool.description}</p>
-                <div class="flex items-center justify-end text-sm">
-                    Try it <ArrowRight class="w-4 h-4 ml-2" />
-                </div>
-            </a>
-        {/each}
+    <!-- Grammars Section -->
+    <div class="w-full max-w-(--breakpoint-xl) px-4">
+        <h2 class="text-2xl font-semibold mb-4 text-left">Context-Free Grammars</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {#each grammarTools as tool}
+                <a
+                    href={tool.href}
+                    class="block p-6 border rounded-lg hover:bg-muted transition-colors duration-200 text-left"
+                >
+                    <h3 class="text-xl font-semibold mb-2">{tool.title}</h3>
+                    <p class="text-muted-foreground mb-4">{@html tool.description}</p>
+                    <div class="flex items-center justify-end text-sm">
+                        Try it <ArrowRight class="w-4 h-4 ml-2" />
+                    </div>
+                </a>
+            {/each}
+        </div>
+    </div>
+
+    <!-- Automata Section -->
+    <div class="w-full max-w-(--breakpoint-xl) px-4">
+        <h2 class="text-2xl font-semibold mb-4 text-left">Finite Automata & Regex</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {#each automataTools as tool}
+                <a
+                    href={tool.href}
+                    class="block p-6 border rounded-lg hover:bg-muted transition-colors duration-200 text-left"
+                >
+                    <h3 class="text-xl font-semibold mb-2">{tool.title}</h3>
+                    <p class="text-muted-foreground mb-4">{@html tool.description}</p>
+                    <div class="flex items-center justify-end text-sm">
+                        Try it <ArrowRight class="w-4 h-4 ml-2" />
+                    </div>
+                </a>
+            {/each}
+        </div>
     </div>
 </div>
