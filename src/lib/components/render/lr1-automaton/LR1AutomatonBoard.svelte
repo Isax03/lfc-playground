@@ -16,7 +16,7 @@
     } from "@xyflow/svelte";
     import "@xyflow/svelte/dist/style.css";
     import { mode } from "mode-watcher";
-    import { Expand, X } from "lucide-svelte";
+    import { Expand, X } from "@lucide/svelte";
     import AutomatonEdge from "../slr-automaton/AutomatonEdge.svelte";
     import LR1AutomatonNode from "./LR1AutomatonNode.svelte";
 

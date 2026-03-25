@@ -14,7 +14,7 @@
         type NodeTypes,
     } from "@xyflow/svelte";
     import "@xyflow/svelte/dist/style.css";    import { mode } from "mode-watcher";
-    import { Expand, Minimize2, X } from "lucide-svelte";
+    import { Expand, Minimize2, X } from "@lucide/svelte";
     import AutomatonEdge from "./AutomatonEdge.svelte";
     import AutomatonNode from "./AutomatonNode.svelte";
 

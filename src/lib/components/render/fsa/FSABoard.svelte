@@ -17,7 +17,7 @@
     } from "@xyflow/svelte";
     import "@xyflow/svelte/dist/style.css";
     import { mode } from "mode-watcher";
-    import { Expand, X } from "lucide-svelte";
+    import { Expand } from "@lucide/svelte";
 
     interface Props {
         nodes: Node[];

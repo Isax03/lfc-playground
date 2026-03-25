@@ -4,7 +4,7 @@
         buttonVariants,
     } from "$lib/shadcn-ui/components/ui/button/button.svelte";
     import * as Sheet from "$lib/shadcn-ui/components/ui/sheet";
-    import { Menu, ChevronDown } from "lucide-svelte";
+    import { Menu, ChevronDown } from "@lucide/svelte";
     import DarkMode from "./DarkMode.svelte";
     import Logo from "./Logo.svelte";
 

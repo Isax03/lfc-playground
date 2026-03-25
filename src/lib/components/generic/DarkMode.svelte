@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Sun, Moon } from "lucide-svelte";
+    import { Sun, Moon } from "@lucide/svelte";
     import { toggleMode } from "mode-watcher";
     import { Button } from "$lib/shadcn-ui/components/ui/button/index";
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { ArrowRight } from "lucide-svelte";
+    import { ArrowRight } from "@lucide/svelte";
 
     // Tool definitions for the homepage grid
     const grammarTools = [

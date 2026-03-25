@@ -12,7 +12,7 @@
     import { mode } from "mode-watcher";
     import Button from "$lib/shadcn-ui/components/ui/button/button.svelte";
     import * as Dialog from "$lib/shadcn-ui/components/ui/dialog/index";
-    import { Expand, X } from "lucide-svelte";
+    import { Expand, X } from "@lucide/svelte";
 
     import "@xyflow/svelte/dist/style.css";
     import TreeNode from "./TreeNode.svelte";

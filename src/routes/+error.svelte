@@ -1,8 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state";
     import { Button } from "$lib/shadcn-ui/components/ui/button";
-    import { Home, Shuffle } from "lucide-svelte";
-
+    import { Home, Shuffle } from "@lucide/svelte";
     const tools = [
         "/first-follow",
         "/ll1-table",

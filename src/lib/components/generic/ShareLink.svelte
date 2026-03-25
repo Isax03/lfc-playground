@@ -1,15 +1,14 @@
 <script lang="ts">
+    import { page } from "$app/state";
     import Button, {
         buttonVariants,
     } from "$lib/shadcn-ui/components/ui/button/button.svelte";
     import * as Dialog from "$lib/shadcn-ui/components/ui/dialog";
-    import { createShareableLink } from "$lib/utils/sharing";
-    import { Share2, Check, X } from "lucide-svelte";
     import { Input } from "$lib/shadcn-ui/components/ui/input";
-    import { Textarea } from "$lib/shadcn-ui/components/ui/textarea";
-    import { page } from "$app/state";
     import Label from "$lib/shadcn-ui/components/ui/label/label.svelte";
-    import { Root } from "$lib/shadcn-ui/components/ui/button";
+    import { Textarea } from "$lib/shadcn-ui/components/ui/textarea";
+    import { createShareableLink } from "$lib/utils/sharing";
+    import { Check, Share2, X } from "@lucide/svelte";
 
     interface Props {
         grammar: string;
@@ -30,7 +29,9 @@
 </script>
 
 <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "outline", size: "default" })}>
+    <Dialog.Trigger
+        class={buttonVariants({ variant: "outline", size: "default" })}
+    >
         <Share2 class="h-4 w-4 mr-2" />
         <span>Share</span>
     </Dialog.Trigger>
@@ -44,7 +45,12 @@
         <div class="grid gap-4 py-4">
             <div class="grid gap-2">
                 <Label for="preview">Grammar Preview</Label>
-                <Textarea readonly value={grammar} class="font-mono" id="preview" />
+                <Textarea
+                    readonly
+                    value={grammar}
+                    class="font-mono"
+                    id="preview"
+                />
             </div>
             <div class="grid gap-2">
                 <Label for="share">Shareable Link</Label>

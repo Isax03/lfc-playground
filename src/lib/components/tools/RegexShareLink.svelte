@@ -3,7 +3,7 @@
         buttonVariants,
     } from "$lib/shadcn-ui/components/ui/button/button.svelte";
     import * as Dialog from "$lib/shadcn-ui/components/ui/dialog";
-    import { Share2, Check, X } from "lucide-svelte";
+    import { Share2, Check, X } from "@lucide/svelte";
     import { Input } from "$lib/shadcn-ui/components/ui/input";
     import { page } from "$app/state";
     import Label from "$lib/shadcn-ui/components/ui/label/label.svelte";
